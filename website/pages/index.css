@@ -1,16 +1,60 @@
-#containerDiv {
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
+body {
+  background-color: #f6f6f6;
+  font-family: sans-serif;
+  margin: 0;
+  padding-top: 10px;
+  user-select: none;
 }
 
-.authDiv {
-  margin: 1rem;
-  padding: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+#welcomeText {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  display: block;
+  font-size: 65px;
+}
+
+.subtitle {
+  font-size: 20px;
+  color: #54595d;
+  text-align: center;
+  display: block;
+}
+
+.buttonContainer {
+  text-align: center;
+  margin-top: 300px;
+}
+
+#orText {
+  font-size: 30px;
+  margin: 10px;
+}
+
+.mainA {
+  display: inline-block;
+  font-family: Arial, Helvetica, sans-serif;
+  text-decoration: none;
+  padding: 30px;
+  font-size: 30px;
+  background-color: #ffff;
+  color: #1a1a1a;
+  border: 2px solid #9b0c0c;
+}
+
+.mainA:hover {
+  background-color: #ffffff;
+  color: #000000;
+  box-shadow: 0 10px 20px rgba(255, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+.mainA:active {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 10px rgba(70, 3, 3, 0.2);
+}
+
+#image1 {
+  pointer-events: none;
+  background-size: cover;
+
 }
