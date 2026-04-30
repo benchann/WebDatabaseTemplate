@@ -2,27 +2,58 @@ body {
   background-color: #f6f6f6;
   font-family: sans-serif;
   margin: 0;
-  padding-top: 10px;
   user-select: none;
 }
 
-#welcomeText {
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  text-align: center;
-  display: block;
-  font-size: 65px;
+#containerDiv {
+  position: fixed;
 }
 
-.subtitle {
+#welcomeText1 {
+  font-family: Arial, Helvetica, sans-serif black;
+  text-align: center;
+  position: fixed;
+  bottom: 30%;
+  right: 50%;
+  display: block;
+  font-size: 15vw;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+#welcomeText2 {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  text-align: center;
+  position: fixed;
+  bottom: 8.3%;
+  right: 25%;
+  display: block;
+  font-size: 15vw;
+  font-weight: 900;
+  letter-spacing: -0.05em;
+}
+
+#subtitle {
   font-size: 20px;
   color: #54595d;
   text-align: center;
   display: block;
+  position: fixed;
+  bottom: 30%;
+  right: 35%;
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 25px;
+  font-weight: 600;
+  letter-spacing: 0.1cm;
+  text-transform: uppercase;
 }
 
 .buttonContainer {
+  position: fixed;
+  transform: translateX(-50%);
+  left: 50%;
+  bottom: 20px;
   text-align: center;
-  margin-top: 300px;
 }
 
 #orText {
@@ -38,23 +69,61 @@ body {
   font-size: 30px;
   background-color: #ffff;
   color: #1a1a1a;
-  border: 2px solid #9b0c0c;
+  border: 2px solid #0c9b43;
 }
 
 .mainA:hover {
   background-color: #ffffff;
   color: #000000;
-  box-shadow: 0 10px 20px rgba(255, 0, 0, 0.2);
+  box-shadow: 0 10px 20px rgba(0, 255, 55, 0.2);
   transform: translateY(-5px);
 }
 
 .mainA:active {
-  transform: translateY(-2px);
+  transform: translateY(-3px);
   box-shadow: 0 5px 10px rgba(70, 3, 3, 0.2);
 }
 
 #image1 {
   pointer-events: none;
   background-size: cover;
+  position: fixed;
+  left: 75%;
+  top: 0;
+  width: 390px;
+}
+
+#image2 {
+  pointer-events: none;
+  z-index: -5;
+  position: fixed;
+  left: 40%;
+  width: 450px;
+  bottom: 35%;
+}
+
+#image3 {
+  z-index: -5;
+  pointer-events: none;
+  background-size: cover;
+  position: fixed;
+  left: 82%;
+  bottom: 0px;
+  width: 500px;
+}
+
+#fadingWall {
+  width: 350px;
+  height: 100vw;
+  background: linear-gradient(to right, #39a578, #f6f6f6);
+}
+
+.popupContainerDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.signUpH1 {
 
 }
