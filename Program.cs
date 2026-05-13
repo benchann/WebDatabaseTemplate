@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Data.Common;
+using System.Linq;
+using System.Net;
 using Microsoft.EntityFrameworkCore;
 using Project.DatabaseUtilities;
 using Project.LoggingUtilities;
@@ -25,16 +28,22 @@ class Program
 
       try
       {
-        if (request.Name == "getItems")
+        if (request.Name == "signUp")
         {
-          request.Respond(database.Items);
-        }
-        else if (request.Name == "addItem")
-        {
-          var (name, amount) = request.GetParams<(string, int)>();
-          var item = new Item(name, amount);
-          database.Items.Add(item);
+          var (username, password) = request.GetParams<(string, string)>();
+
+          if (database.Users.Any(u => u.Username == username))
+          {
+            request.Respond<string?>(null);
+            continue;
+          }
+
+          var token = Guid.NewGuid().ToString();
+          var user = new User(username, password, token);
+          database.Users.Add(user);
           database.SaveChanges();
+
+          request.Respond(token);
         }
       }
       catch (Exception exception)
@@ -49,12 +58,14 @@ class Program
 
 class Database() : DatabaseCore("database")
 {
-  public DbSet<Item> Items { get; set; } = default!;
+  public DbSet<User> Users { get; set; } = default!;
 }
 
-class Item(string name, double amount)
+class User(string username, string password, string token)
 {
   public int Id { get; set; } = default!;
-  public string Name { get; set; } = name;
-  public double Amount { get; set; } = amount;
+  public string Username { get; set; } = username;
+  public string Password { get; set; } = password;
+  public string Token { get; set; } = token;
 }
+
