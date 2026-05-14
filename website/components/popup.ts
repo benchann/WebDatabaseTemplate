@@ -6,10 +6,10 @@ export function createPopup(element: HTMLElement) {
             return;
         }
 
-        popupDiv.remove();
+        popupDiv.classList.add("invisible");
     }
 
-    var popupDiv = create("div", { className: "popupBackgroundDiv", onclick: close },
+    var popupDiv = create("div", { className: "popupBackgroundDiv invisible", onclick: close },
         create("div", { className: "popupBodyDiv" },
             element
         )
