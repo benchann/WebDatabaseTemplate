@@ -61,7 +61,7 @@ body {
   margin: 10px;
 }
 
-.mainA {
+.LISUButtons {
   display: inline-block;
   font-family: Arial, Helvetica, sans-serif;
   text-decoration: none;
@@ -72,14 +72,14 @@ body {
   border: 2px solid #0c9b43;
 }
 
-.mainA:hover {
+.LISUButtons:hover {
   background-color: #ffffff;
   color: #000000;
   box-shadow: 0 10px 20px rgba(0, 255, 55, 0.2);
   transform: translateY(-5px);
 }
 
-.mainA:active {
+.LISUButtons:active {
   transform: translateY(-3px);
   box-shadow: 0 5px 10px rgba(70, 3, 3, 0.2);
 }
@@ -124,13 +124,31 @@ body {
   align-items: center;
 }
 
-.buttonsSUInput {
-  padding: 14px;
+.buttonsSULIInput {
+  padding: 0.6px;
   margin: 7px;
   font-size: 15px;
+  border-radius: 8px;
+  border: 1px, solid #CCCCCC;
+  width: 16vw;
+  height: 34px;
+  color: #888888;
+  opacity: 1; /* insures te color isnt faded by the browser*/
 }
 
-#alertSU {
+.submitButton {
+  padding: 14px, 14px;
+  margin: 22px;
+  font-size: 50px;
+  background-color: #000000;
+  border-radius: 8px;
+  color: #ffffff;
+  width: 17vw;
+  height: 37px;
+  font-size: 13px;
+}
+
+#alertLISU {
   position: fixed;
   top: 20px;
   right: 20px;

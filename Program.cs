@@ -7,6 +7,18 @@ using Project.DatabaseUtilities;
 using Project.LoggingUtilities;
 using Project.ServerUtilities;
 
+class Database() : DatabaseCore("database")
+{
+  public DbSet<User> Users { get; set; } = default!;
+}
+
+class User(string username, string password, string token)
+{
+  public int Id { get; set; } = default!;
+  public string Username { get; set; } = username;
+  public string Password { get; set; } = password;
+  public string Token { get; set; } = token;
+}
 class Program
 {
   static void Main()
@@ -45,6 +57,13 @@ class Program
 
           request.Respond(token);
         }
+        else if (request.Name == "logIn")
+        {
+          var (username, password) = request.GetParams<(string, string)>();
+          var user = database.Users.FirstOrDefault(u =>u.Username == username &&u.Password == password);
+
+          request.Respond(user?.Token);
+        }
       }
       catch (Exception exception)
       {
@@ -54,18 +73,3 @@ class Program
     }
   }
 }
-
-
-class Database() : DatabaseCore("database")
-{
-  public DbSet<User> Users { get; set; } = default!;
-}
-
-class User(string username, string password, string token)
-{
-  public int Id { get; set; } = default!;
-  public string Username { get; set; } = username;
-  public string Password { get; set; } = password;
-  public string Token { get; set; } = token;
-}
-
