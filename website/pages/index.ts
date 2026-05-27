@@ -15,22 +15,48 @@ var signUpButton = get("button", "signUpButton");
 var loginButton = get("button", "loginButton");
 
 var usernameSUInput = create("input", { placeholder: "Enter your username", className: "buttonsSULIInput" });
-var passwordSUInput = create("input", { placeholder: "Enter your password", className: "buttonsSULIInput" });
-var confirmSUInput = create("input", { placeholder: "Enter your password again", className: "buttonsSULIInput" });
+var passwordSUInput = create("input", { placeholder: "Enter your password", type:"password", className: "buttonsSULIInput" });
+var confirmSUInput = create("input", { placeholder: "Enter your password again", type:"password", className: "buttonsSULIInput" });
 var submitSUButton = create("button", { innerText: "Create an account", className: "submitButton" });
-var userNameSUDiv = create("div", { innerText: "Username", className: "" });
-var passwordSUDiv = create("div", { innerText: "Password", className: "" });
-var confirmPasswordSUDiv = create("div", { innerText: "Confirm Password", className: "" });
+var userNameSUDiv = create("div", { innerText: "Username", className: "usernamePasswordDiv" });
+var passwordSUDiv = create("div", { innerText: "Password", className: "usernamePasswordDiv" });
+var confirmPasswordSUDiv = create("div", { innerText: "Confirm Password", className: "usernamePasswordDiv" });
+
+var sUEyeIcon = create("img", {src:"../images/view.png" });
+var sUEyeButton = create("button", {className: "eyeButton"});
+sUEyeButton.appendChild(sUEyeIcon);
+
+var passwordSUWrapper = create("div", { className: "passwordInputWrapper" });
+passwordSUWrapper.appendChild(passwordSUInput);
+passwordSUWrapper.appendChild(sUEyeButton);
+
+var confirmEyeIcon = create("img", { src: "../images/view.png" });
+var confirmEyeButton = create("button", { className: "eyeButton" });
+confirmEyeButton.appendChild(confirmEyeIcon);
+
+var confirmSUWrapper = create("div", { className: "passwordInputWrapper" });
+confirmSUWrapper.appendChild(confirmSUInput);
+confirmSUWrapper.appendChild(confirmEyeButton);
 
 
 var usernameLIInput = create("input", { placeholder: "Enter your username", className: "buttonsSULIInput" });
-var passwordLIInput = create("input", { placeholder: "Enter your password", className: "buttonsSULIInput" });
+var passwordLIInput = create("input", { placeholder: "Enter your password", type:"password", className: "buttonsSULIInput" });
 var submitLIButton = create("button", { innerText: "Log In", className: "submitButton" });
-var userNameLIDiv = create("div", { innerText: "Username", className: "" });
-var passwordLIDiv = create("div", { innerText: "Password", className: "" });
+var userNameLIDiv = create("div", { innerText: "Username", className: "usernamePasswordDiv" });
+var passwordLIDiv = create("div", { innerText: "Password", className: "usernamePasswordDiv" });
+
+var lIEyeIcon = create("img", {src:"../images/view.png" });
+var lIEyeButton = create("button", {className: "eyeButton"});
+lIEyeButton.appendChild(lIEyeIcon);
+
+var passwordLIWrapper = create("div", { className: "passwordInputWrapper" });
+passwordLIWrapper.appendChild(passwordLIInput);
+passwordLIWrapper.appendChild(lIEyeButton);
+
 
 var errorSUDiv = create("div");
 var errorLIDiv = create("div");
+
 
 signUpButton.onclick = function () {
     popupSUDiv.classList.remove("invisible");
@@ -40,11 +66,46 @@ loginButton.onclick = function () {
     popupLIDiv.classList.remove("invisible");
 }
 
+lIEyeButton.addEventListener("click", function(){
+    if (passwordLIInput.getAttribute("type")=== "password"){
+        passwordLIInput.setAttribute("type","text");
+        lIEyeIcon.src ="../images/hidden.png";
+    }
+    else{
+        passwordLIInput.setAttribute("type", "password");
+        lIEyeIcon.src= "../images/view.png";
+    }
+});
+
+sUEyeButton.addEventListener("click", function(){
+    if (passwordSUInput.getAttribute("type")=== "password"){
+        passwordSUInput.setAttribute("type","text");
+        sUEyeIcon.src ="../images/hidden.png";
+    }
+    else{
+        passwordSUInput.setAttribute("type", "password");
+        sUEyeIcon.src= "../images/view.png";
+    }
+});
+
+confirmEyeButton.addEventListener("click", function() {
+    if (confirmSUInput.getAttribute("type") === "password") {
+        confirmSUInput.setAttribute("type", "text");
+        confirmEyeIcon.src = "../images/hidden.png";
+    } else {
+        confirmSUInput.setAttribute("type", "password");
+        confirmEyeIcon.src = "../images/view.png";
+    }
+});
+
 var popupSUContentDiv = create("div", { className: "popupContainerDiv" },
-    create("h1", { className: "signUpH1", innerText: "Sign Up" }),
+    create("h1", { className: "popupSubtitle", innerText: "Sign Up", }),
+    userNameSUDiv,
     usernameSUInput,
-    passwordSUInput,
-    confirmSUInput,
+    passwordSUDiv,
+    passwordSUWrapper,
+    confirmPasswordSUDiv,
+    confirmSUWrapper,
     submitSUButton,
     errorSUDiv,
 );
@@ -67,18 +128,21 @@ submitSUButton.onclick = async function () {
         return;
     }
     else {
-        console.log("clicked");
         alertSULI("User created successfully");
         localStorage.setItem("token", token);
         setTimeout(() => { location.href = "index.html"; }, 2000);
+        setTimeout(() => { location.href = "feed.html"; }, 400);
+
     }
 };
 
 
 var popupLIContentDiv = create("div", { className: "popupContainerDiv" },
-    create("h1", { className: "LIH1", innerText: "Login" }),
+    create("h1", { className: "popupSubtitle", innerText: "Login" }),
+    userNameLIDiv,
     usernameLIInput,
-    passwordLIInput,
+    passwordLIDiv,
+    passwordLIWrapper,
     submitLIButton,
     errorLIDiv,
 );
@@ -90,12 +154,14 @@ submitLIButton.onclick = async function () {
     var token = await send<string | null>("logIn", usernameLIInput.value, passwordLIInput.value)
     if (token == null) {
         errorLIDiv.innerText = "Password or Username do not match.";
-        setTimeout(() => {errorLIDiv.innerText = ""; }, 5000);
+        setTimeout(() => { errorLIDiv.innerText = ""; }, 5000);
         return;
     }
     else {
-        alertSULI("User logged successfully");
+        alertSULI("User logged in successfully");
         localStorage.setItem("token", token);
         setTimeout(() => { location.href = "index.html"; }, 2000);
+        setTimeout(() => { location.href = "feed.html"; }, 400);
+
     }
 }

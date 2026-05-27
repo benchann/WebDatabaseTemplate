@@ -85,6 +85,16 @@ body {
   box-shadow: 0 5px 10px rgba(70, 3, 3, 0.2);
 }
 
+.usernamePasswordDiv {
+  font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+  font-size: 1.4vw;
+  margin-top: 1.2vh;
+  color: #000000;
+  width: 17vw;
+  height: 2vh;
+  font-size: 0.8vw;
+}
+
 #image1 {
   pointer-events: none;
   background-size: cover;
@@ -127,25 +137,34 @@ body {
 
 .buttonsSULIInput {
   padding: 0.6px;
-  margin: 7px;
   font-size: 15px;
   border-radius: 8px;
   border: 1px, solid #CCCCCC;
   width: 16vw;
-  height: 34px;
+  height: 4vh;
   color: #888888;
-  opacity: 1; /* insures te color isnt faded by the browser*/
+  opacity: 1;
+  /* insures te color isnt faded by the browser*/
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  box-sizing: border-box;
+}
+
+/* Subtle focus effect when the user clicks into an input */
+.buttonsSULIInput:focus {
+  outline: none;
+  border-color: #cbd5e1;
+  box-shadow: 0 0 0 3px rgba(203, 213, 225, 0.2);
 }
 
 .submitButton {
   padding: 14px, 14px;
-  margin: 22px;
+  margin: 1.4vh;
   font-size: 50px;
   background-color: #000000;
   border-radius: 8px;
   color: #ffffff;
   width: 17vw;
-  height: 37px;
+  height: 3.9vh;
   font-size: 13px;
 }
 
@@ -161,4 +180,59 @@ body {
   font-size: 16px;
   z-index: 10000;
   animation: slideIn 0.5s ease-out;
+}
+
+.popupSubtitle {
+  font-family: Verdana, Geneva, Tahoma, sans-serif;
+  font-weight: bolder;
+  letter-spacing: 0.067vw;
+}
+
+/* This anchors our absolute eye buttons so they don't wander off */
+.passwordInputWrapper {
+  position: relative;
+  /* CRITICAL: Acts as the anchor point for the eye tells the website to anchor every child*/
+  /* display: inline-block; */
+  /* Keeps the box tightly wrapped around its contents */
+  /* width: 100%; */
+  /* Spans full width of your form container */
+  /* margin-bottom: 16px; */
+  /* Clear spacing before the next label */
+}
+
+.eyeButton {
+  position: absolute;
+  /* left: 0; */
+  right: 5px;
+  /* Centers it perfectly from the right edge edge */
+  top: 50%;
+  transform: translateY(-50%);
+  /* Centers it perfectly vertically */
+
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  margin: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Removes any default browser button outlines */
+  outline: none;
+}
+
+/* Style and scale down your custom Flaticon eye graphics */
+.eyeButton img {
+  width: 20px;
+  height: 20px;
+  object-fit: contain;
+  opacity: 0.6;
+  /* Matches the soft grey/muted style in your mockup */
+  transition: opacity 0.2s ease;
+}
+
+/* Makes the eye icon slightly more distinct when hovering over it */
+.eyeButton:hover img {
+  opacity: 0.9;
 }
