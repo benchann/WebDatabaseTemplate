@@ -38,6 +38,7 @@ var confirmSUWrapper = create("div", { className: "passwordInputWrapper" });
 confirmSUWrapper.appendChild(confirmSUInput);
 confirmSUWrapper.appendChild(confirmEyeButton);
 
+////////
 
 var usernameLIInput = create("input", { placeholder: "Enter your username", className: "buttonsSULIInput" });
 var passwordLIInput = create("input", { placeholder: "Enter your password", type:"password", className: "buttonsSULIInput" });
@@ -57,6 +58,27 @@ passwordLIWrapper.appendChild(lIEyeButton);
 var errorSUDiv = create("div");
 var errorLIDiv = create("div");
 
+var tabSUButton = create ("button", { innerText:"Sign Up",className:"tabSwitch"}) //adding a switch between su and li in the popup
+var tabSUIcon = create("img", {src: "../images/profile.png"})
+tabSUButton.appendChild(tabSUIcon)
+var tabButtonSUContainer = create("div", { className: "tabButtonContainer" });
+tabButtonSUContainer.appendChild(tabSUButton)
+
+var tabLIButton = create ("button", {innerText: "Log In", className:"tabSwitch"})
+var tabLIIcon = create('img',{src: "../images/enter.png"})
+tabLIButton.appendChild(tabLIIcon)
+var tabButtonLIContainer = create("div", { className: "tabButtonContainer" });
+tabButtonLIContainer.appendChild(tabLIButton)
+
+tabSUButton.onclick = function() {
+    popupLIDiv.classList.add("invisible");  // Hide login popup
+    popupSUDiv.classList.remove("invisible"); // Open signup popup
+}
+
+tabLIButton.onclick = function() {
+    popupSUDiv.classList.add("invisible");   // Hide signup popup
+    popupLIDiv.classList.remove("invisible");  // Open login popup
+}
 
 signUpButton.onclick = function () {
     popupSUDiv.classList.remove("invisible");
@@ -100,6 +122,7 @@ confirmEyeButton.addEventListener("click", function() {
 
 var popupSUContentDiv = create("div", { className: "popupContainerDiv" },
     create("h1", { className: "popupSubtitle", innerText: "Sign Up", }),
+    tabButtonSUContainer, //order and anarchey matters!
     userNameSUDiv,
     usernameSUInput,
     passwordSUDiv,
@@ -139,6 +162,7 @@ submitSUButton.onclick = async function () {
 
 var popupLIContentDiv = create("div", { className: "popupContainerDiv" },
     create("h1", { className: "popupSubtitle", innerText: "Login" }),
+    tabButtonLIContainer,
     userNameLIDiv,
     usernameLIInput,
     passwordLIDiv,
