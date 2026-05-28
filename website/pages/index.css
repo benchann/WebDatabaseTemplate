@@ -124,9 +124,9 @@ body {
 }
 
 #fadingWall {
-  width: 23.8vw;
+  width: 18.8vw;
   height: 100vw;
-  background: linear-gradient(to right, #39a578, #f6f6f6);
+  background: linear-gradient(to right, #39a578, #f6f6f6fb);
 }
 
 .popupContainerDiv {
@@ -178,14 +178,15 @@ body {
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-size: 16px;
-  z-index: 10000;
+  z-index: 100;
   animation: slideIn 0.5s ease-out;
 }
 
-.popupSubtitle {
+.SULIText {
   font-family: Verdana, Geneva, Tahoma, sans-serif;
   font-weight: bolder;
   letter-spacing: 0.067vw;
+  font-size: 2vw;
 }
 
 /* This anchors our absolute eye buttons so they don't wander off */
@@ -235,4 +236,73 @@ body {
 /* Makes the eye icon slightly more distinct when hovering over it */
 .eyeButton:hover img {
   opacity: 0.9;
+}
+
+/* Container holding the current tab button */
+.tabButtonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 50px;
+    width: 100%;
+}
+
+/* Base style for both tab buttons */
+.tabSwitch {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 6px 12px;
+    border-radius: 6px;
+    
+    /* Default state: Darker/Faded out for the inactive tab */
+    color: #8a8a8f; 
+}
+
+/* Icon sizing inside the tab button */
+.tabIconImg {
+    width: 16px;
+    height: 16px;
+    object-fit: contain;
+    /* Fades the icon color automatically if it's black by default */
+    opacity: 0.6; 
+}
+
+/* Active State: The tab we are currently viewing */
+.tabSwitch.active {
+    color: #1c1c1e; /* Crisp dark text */
+    background-color: #f2f2f7; /* Subtle light background pill effect */
+}
+
+.tabSwitch.active .tabIconImg {
+    opacity: 1; /* Fully bright icon */
+}
+/* The CURRENT active view (Darker text, soft grey pill background) */
+.currentTab {
+    color: #1c1c1e;
+    background-color: #f2f2f7; 
+    border-color: #e5e5ea;
+    pointer-events: none; /* Prevents clicking on the active page */
+}
+.currentTab .tabIconImg {
+    opacity: 1;
+}
+
+/* The alternative option (Faded out, greyed text) */
+.tabSwitch:not(.currentTab) {
+    color: #8e8e93; 
+}
+.tabSwitch:not(.currentTab) .tabIconImg {
+    opacity: 0.5;
+}
+
+/* Quick hover feedback for the clickable tab link */
+.tabSwitch:not(.currentTab):hover {
+    color: #1c1c1e;
+    background-color: #f2f2f7;
 }
