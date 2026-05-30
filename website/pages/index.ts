@@ -164,14 +164,47 @@ submitLIButton.onclick = async function () {
 
     }
 };
+//LO BUTN
+var greetingContainer = document.getElementById("userGreeting");
+var nameDisplay = document.getElementById("userNameDisplay");
+var logOutButton = get("button", "logOutButton");
+logOutButton.onclick = async function () {
+    // 2. (Optional) Tell the server to invalidate the token
+   const currentToken = localStorage.getItem("token");
+
+    // 2. Only tell the server if a token actually exists
+    if (currentToken) {
+        await send("logOut", currentToken);
+    }
+
+    // 3. Remove the token from the browser
+    localStorage.removeItem("token");
+
+    // 4. Reset UI
+    alertSULI("You have been logged out.");
+
+    //5. UI Cleanup
+    loginButton.style.display = "inline-block";
+    signUpButton.style.display = "inline-block";
+    logOutButton.style.display = "none";
+
+    // 4. Hide the greeting and clear the name
+    if (greetingContainer) {
+        greetingContainer.style.display = "none"; 
+    }
+    if (nameDisplay) {
+        nameDisplay.innerText = ""; // Clear the text just in case
+    }
+    
+    alertSULI("You have been logged out.");
+};
 //REMOVING SU/LI BUTTONS AND ADDING GREETING
 function updateNavUI(username: string) {
     //Hiding the Login and Sign Up buttons using your existing variables
     loginButton.style.display = "none";
     signUpButton.style.display = "none";
-    //Locating the greeting elements in the DOM
-    var greetingContainer = document.getElementById("userGreeting");
-    var nameDisplay = document.getElementById("userNameDisplay");
+    logOutButton.style.display = "inline-block";
+
     // Making the container visible and set the text
     if (greetingContainer) {
         greetingContainer.style.display = "flex"; 

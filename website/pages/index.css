@@ -48,6 +48,9 @@ body {
   letter-spacing: 0.1cm;
   text-transform: uppercase;
 }
+#logOutButton{
+  display: none;
+}
 
 .NavUIButtons {
   background-color: transparent; /* No box background */
