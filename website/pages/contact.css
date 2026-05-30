@@ -1,0 +1,115 @@
+body {
+    background-color: #f9f9f9; /* Matches your white homepage */
+    color: #333;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+.contact-container {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 20px;
+    position: relative;
+    z-index: 1;
+}
+.contact-container img {
+    position: absolute;
+    z-index: -1; /* Pushes images behind the text */
+    opacity: 0.6; /* Softens them so they don't compete with text */
+    pointer-events: none; /* Prevents users from accidentally trying to drag them */
+    max-width: 200px; /* Limits size */
+    width: 150px; /* Force a size so it doesn't break layout */
+}
+/* 3. Position each image individually */
+#image1 {
+    top:20;
+    width: 100vw;
+    left: -30px;
+    transform: rotate(15deg);
+}
+#image2 {
+    top: 30%;
+    right: -100px;
+    transform: rotate(-10deg);
+}
+#image3 {
+    bottom: 50px;
+    left: -50px;
+    transform: rotate(-20deg);
+}
+.header {
+    text-align: center;
+    margin-bottom: 60px;
+}
+.header h1 {
+    font-size: 3vw;
+    color: #1a1a1a;
+    margin-bottom: 15px;
+}
+.email-link {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 25px;
+    background-color: #c7edec; /* A professional dark blue/gray */
+    color: white;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+.email-link:hover {
+    background-color: #a0c7c6;
+}
+.info-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+}
+.info-card {
+    background: rgba(255, 255, 255, 0.8); /* Slightly transparent for depth */
+    backdrop-filter: blur(10px);          /* Glassmorphism effect */
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.08); 
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275); /* Smooth pop-up */
+}
+.info-card:hover {
+    transform: translateY(-10px); /* The "lift" effect */
+    box-shadow: 0 10px 30px rgba(101, 164, 144, 0.2); /* Glow on hover */
+    border-color: #56cfe1;
+}
+.info-card h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+.info-card p {
+    color: #666;
+    line-height: 1.6;
+}
+.backButton {
+    position: fixed; /* This anchors it to the container */
+    top: 20px;          /* Distance from top */
+    left: 20px;         /* Distance from left */
+    display: inline-flex;
+    text-decoration: none;
+    color: #a0c7b6; /* Your virus mint color */
+    font-weight: 600;
+    padding: 8px 18px;
+    border: 2px solid #a0c7b6;
+    border-radius: 50px; /* Fully rounded pill shape */
+    transition: all 0.3s ease;
+    font-size: 0.9rem;
+    margin-bottom: 30px;
+}
+
+.backButton:hover {
+    background-color: #a0c7c6;
+    color: #ffffff;
+    box-shadow: 0 4px 10px rgba(109, 220, 155, 0.3);
+    transform: translateX(-5px); /* Adds a little "pop" movement when hovering */
+}
+/* Responsive design for mobile */
+@media (max-width: 768px) {
+    .info-grid { grid-template-columns: 1fr; }
+}

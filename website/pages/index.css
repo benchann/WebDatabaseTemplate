@@ -10,10 +10,10 @@ body {
 }
 
 #welcomeText1 {
-  font-family: Arial, Helvetica, sans-serif black;
+  font-family: Arial, Helvetica, sans-serif ;
   text-align: center;
   position: fixed;
-  bottom: 15.2vw;
+  bottom: 13.2vw;
   right: 50vw;
   display: block;
   font-size: 15vw;
@@ -26,7 +26,7 @@ body {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   text-align: center;
   position: fixed;
-  bottom: 4.9vw;
+  bottom: 2.4vw;
   right: 24.8vw;
   display: block;
   font-size: 15vw;
@@ -41,7 +41,7 @@ body {
   text-align: center;
   display: block;
   position: fixed;
-  bottom: 15.2vw;
+  bottom: 12.2vw;
   right: 27vw;
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-weight: 600;
@@ -49,42 +49,56 @@ body {
   text-transform: uppercase;
 }
 
-.buttonContainer {
-  position: fixed;
-  transform: translateX(-50%);
-  left: 50%;
-  bottom: 20px;
-  text-align: center;
+.NavUIButtons {
+  background-color: transparent; /* No box background */
+  border: none;                  /* Removes the green border */
+  color: #ffffff;                /* White text for the dark bar */
+  font-family: 'Arial', sans-serif;
+  font-size: 1.1vw;              /* Smaller text looks more professional */
+  font-weight: 700;
+  cursor: pointer;
+  padding: 10px 15px;               /* Horizontal spacing between buttons */
+  transition: all 0.4 ease;     
+  position: relative;
+  text-decoration: none;/* removes unwanted lines and shit on buttons */
+  display: inline-block; /*makes buttons especially anchors hover aswell with commands and not be stuck */
 }
 
-#orText {
-  font-size: 30px;
-  margin: 10px;
+.NavUIButtons:hover {
+  color: #ffffff;
+  opacity: 0.8; /* Makes the text look like it's fading slightly */
+  transform: translateY(-1px); /* Slight lift */;
 }
 
-.LISUButtons {
-  display: inline-block;
-  font-family: Arial, Helvetica, sans-serif;
-  text-decoration: none;
-  padding: 30px;
-  font-size: 1.8vw;
-  background-color: #ffff;
-  color: #1a1a1a;
-  border: 2px solid #0c9b43;
-}
-
-.LISUButtons:hover {
-  background-color: #ffffff;
-  color: #000000;
-  box-shadow: 0 10px 20px rgba(0, 255, 55, 0.2);
-  transform: translateY(-5px);
-}
-
-.LISUButtons:active {
-  transform: translateY(-3px);
+.NavUIButtons:active {
+  transform: translateY(0); /* Presses back down */
+  opacity: 0.5;
   box-shadow: 0 5px 10px rgba(70, 3, 3, 0.2);
 }
+.NavUIButtons:not(:first-child) {
+  border-left: 1px solid #646262; /* A subtle grey line */
+  margin-left: 5px;            /* Pushes the line slightly away from the text */
+  padding-left: 25px;          /* Adds space on the other side of the line */
+}
+.NavUIButtons:last-child {
+  border-right: 1px solid #646262;
+  padding-right: 25px; /* Matches your left padding */
+  margin-right: 5px;   /* Matches your left margin */
+}
+.userGreeting {
+    font-weight: 700;
 
+  display: none;
+  color: white;
+  font-family: Arial, sans-serif;
+  font-size: 1.1vw;
+  white-space: nowrap;
+}
+#userNameDisplay {
+    font-weight: bold;
+    color: #B2F2BB; /* A nice "science" green, or white/cyan */
+    margin-left: 8px; /* Adds space between "Hello," and the name */
+}
 .usernamePasswordDiv {
   font-family: 'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
   font-size: 1.4vw;
@@ -94,13 +108,20 @@ body {
   height: 2vh;
   font-size: 0.8vw;
 }
-
+#image4{
+  pointer-events: none;
+  background-size: cover;
+  position: fixed;
+  left: 78vw;
+  top: 2.5vw;
+  width: 22vw;
+}
 #image1 {
   pointer-events: none;
   background-size: cover;
   position: fixed;
-  left: 72vw;
-  top: 0vw;
+  left: 8vw;
+  top: 30vw;
   width: 22vw;
 }
 
@@ -108,7 +129,7 @@ body {
   pointer-events: none;
   z-index: -5;
   position: fixed;
-  left: 40vw;
+  left: 36vw;
   width: 22vw;
   bottom: 19vw;
 }
@@ -123,11 +144,11 @@ body {
   width: 22vw;
 }
 
-#fadingWall {
+/* #fadingWall {
   width: 18.8vw;
   height: 100vw;
   background: linear-gradient(to right, #39a578, #f6f6f6fb);
-}
+} */
 
 .popupContainerDiv {
   display: flex;
@@ -139,7 +160,7 @@ body {
   padding: 0.6px;
   font-size: 15px;
   border-radius: 8px;
-  border: 1px, solid #CCCCCC;
+  border: 1px solid #CCCCCC;
   width: 16vw;
   height: 4vh;
   color: #888888;
@@ -157,7 +178,7 @@ body {
 }
 
 .submitButton {
-  padding: 14px, 14px;
+  padding: 14p 14px;
   margin: 1.4vh;
   font-size: 50px;
   background-color: #000000;
@@ -305,4 +326,21 @@ body {
 .tabSwitch:not(.currentTab):hover {
     color: #1c1c1e;
     background-color: #f2f2f7;
+}
+.topNavBar{
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background-color: #1a1a1a;
+  display: flex;
+  align-items: center;
+  padding: 0 40px;
+  box-sizing: border-box; 
+}
+.navRight {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
 }
