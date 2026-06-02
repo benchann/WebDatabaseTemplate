@@ -51,6 +51,9 @@ body {
 #logOutButton{
   display: none;
 }
+#accountInfo{
+  display: none;
+}
 
 .NavUIButtons {
   background-color: transparent; /* No box background */
@@ -158,7 +161,51 @@ body {
   flex-direction: column;
   align-items: center;
 }
+/* 1. Force the outer popup box wrapper to shrink tightly around the content */
+.logout-popup-root {
+  width: 400px !important;       /* Clean desktop sizing width */
+  max-width: 85vw !important;    /* Mobile fallback safeguard */
+  height: auto !important;       /* Forces the giant white void to vanish */
+  min-height: unset !important;  /* Overrides any default frame shapes */
+  padding: 35px 25px !important; /* Perfect, equal breathing room on all sides */
+  border-radius: 16px;           /* Modern rounded corners */
+}
 
+/* 2. Fix the layout container inside the popup */
+.logOutPopUpContainerDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  gap: 25px; /* Perfect, uniform spacing between the text and buttons */
+  box-sizing: border-box;
+}
+
+/* 3. Strip the 50px margin-bottom inherited from the tab class */
+.logout-buttons {
+  margin-bottom: 0 !important; 
+  gap: 15px; /* Clean gap between your choice buttons */
+}
+
+/* 4. Fix font scaling so it stops stretching awkwardly on different window sizes */
+.logOutPopUpContainerDiv .SULIText {
+  font-size: 1.3rem; /* Perfectly stable scaling */
+  text-align: center;
+  line-height: 1.4;
+  font-family: Arial, sans-serif;
+}
+
+/* 5. Size down the buttons so they match the smaller aesthetic wrapper */
+.logOutPopUpContainerDiv .submitButton {
+  width: 130px;
+  height: 42px;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0; /* Clear default global margins messing up placement */
+  cursor: pointer;
+}
 .buttonsSULIInput {
   padding: 0.6px;
   font-size: 15px;

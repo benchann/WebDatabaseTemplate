@@ -93,6 +93,24 @@ var popupLIDiv = createPopup(popupLIContentDiv)// creates a popup with the manua
 document.body.append(popupLIDiv);// implements the new popup
 //#endregion
 
+//#region LOG OUT CONFIRMATION POPUP
+var confirmText = create("div", { innerText: "Are you sure you wanna log out?", className: "SULIText" });
+var confirmYesButton = create("button", { innerText: "Yes, Log Out", className: "submitButton" });
+var confirmNoButton = create("button", { innerText: "Cancel", className: "submitButton" });
+var confirmButtonContainer = create("div", { className: "tabButtonContainer logoutButtons" },
+    confirmYesButton,
+    confirmNoButton
+);
+var popupLOContentDiv = create("div", { className: "logOutPopUpContainerDiv" },
+    confirmText,
+    confirmButtonContainer
+);
+// Turn it into a popup using your library and hide it initially
+var popupLODiv = createPopup(popupLOContentDiv);
+popupLODiv.classList.add("invisible"); 
+document.body.append(popupLODiv);
+//#endregion
+
 //#region FUNCTIONS
 
 //ALERT FUNC
@@ -104,7 +122,7 @@ function alertSULI(message: string) {
 
     setTimeout(() => { toast.remove(); }, 1700);
 };
-//SU/LI BUTTONS ONCLICK FUNCS
+//#region SU/LI BUTTONS(nav and tab) FUNCS
 signUpButton.onclick = function () {
     popupSUDiv.classList.remove("invisible");
 };
@@ -120,7 +138,9 @@ tabLIButton.onclick = function () {
     popupSUDiv.classList.remove("invisible");  // Hides and shows login popup with a manually made component(invisible)
     popupLIDiv.classList.add("invisible");  
 };
-//SU/LI SUMBIT FUNCS
+//#endregion
+
+//#region SU/LI SUMBIT FUNCS
 submitSUButton.onclick = async function () {
 
     if (passwordSUInput.value != confirmSUInput.value) {
@@ -128,7 +148,6 @@ submitSUButton.onclick = async function () {
         setTimeout(() => { errorSUDiv.innerText = ""; }, 3500);
         return;
     }
-
     var username = usernameSUInput.value;
     var password = passwordSUInput.value;
     var token = await send<string | null>("signUp", username, password);
@@ -144,7 +163,6 @@ submitSUButton.onclick = async function () {
             popupSUDiv.classList.add("invisible");
         popupLIDiv.classList.add("invisible");
     }, 1700);
-
     }
 };
 submitLIButton.onclick = async function () {
@@ -161,33 +179,34 @@ submitLIButton.onclick = async function () {
             popupSUDiv.classList.add("invisible");
         popupLIDiv.classList.add("invisible");
     }, 1700);
-
     }
 };
-//LO BUTN
-var greetingContainer = document.getElementById("userGreeting");
-var nameDisplay = document.getElementById("userNameDisplay");
+//#endregion
+
+//#region LO FUNCS
 var logOutButton = get("button", "logOutButton");
-logOutButton.onclick = async function () {
+var accountInfoButton = get("button", "accountInfo")
+logOutButton.onclick = function () {
+    popupLODiv.classList.remove("invisible");
+};
+confirmNoButton.onclick = function () {
+    popupLODiv.classList.add("invisible");
+};
+confirmYesButton.onclick = async function () {
+    popupLODiv.classList.add("invisible");
     // 2. (Optional) Tell the server to invalidate the token
    const currentToken = localStorage.getItem("token");
-
     // 2. Only tell the server if a token actually exists
     if (currentToken) {
         await send("logOut", currentToken);
     }
-
     // 3. Remove the token from the browser
     localStorage.removeItem("token");
-
-    // 4. Reset UI
-    alertSULI("You have been logged out.");
-
     //5. UI Cleanup
     loginButton.style.display = "inline-block";
     signUpButton.style.display = "inline-block";
     logOutButton.style.display = "none";
-
+    accountInfoButton.style.display="none";
     // 4. Hide the greeting and clear the name
     if (greetingContainer) {
         greetingContainer.style.display = "none"; 
@@ -195,16 +214,19 @@ logOutButton.onclick = async function () {
     if (nameDisplay) {
         nameDisplay.innerText = ""; // Clear the text just in case
     }
-    
     alertSULI("You have been logged out.");
 };
-//REMOVING SU/LI BUTTONS AND ADDING GREETING
+//#endregion
+
+//#region REMOVING SU/LI BUTTONS AND ADDING GREETING
+var greetingContainer = document.getElementById("userGreeting");
+var nameDisplay = document.getElementById("userNameDisplay");
 function updateNavUI(username: string) {
     //Hiding the Login and Sign Up buttons using your existing variables
     loginButton.style.display = "none";
     signUpButton.style.display = "none";
     logOutButton.style.display = "inline-block";
-
+    accountInfoButton.style.display="inline-block";
     // Making the container visible and set the text
     if (greetingContainer) {
         greetingContainer.style.display = "flex"; 
@@ -231,7 +253,9 @@ if (!token) return; // No token, no need to fetch
         localStorage.removeItem("token");
     }
 }
-//SU/LI EVENTLISTNER FOR PASSWORD SECURITY
+//#endregion
+
+//#region SU/LI EVENTLISTNER FOR PASSWORD SECURITY
 sUEyeButton.addEventListener("click", function () {
     if (passwordSUInput.getAttribute("type") === "password") {
         passwordSUInput.setAttribute("type", "text");
@@ -261,4 +285,5 @@ lIEyeButton.addEventListener("click", function () {
         lIEyeIcon.src = "../images/view.png";
     }
 });
+//#endregion
 //#endregion

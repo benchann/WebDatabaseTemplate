@@ -2,13 +2,92 @@
 <html>
 
 <head>
-    <title>feedPage</title>
-    <link rel="stylesheet" href="feed.css">
+    <title>Accout Info Page</title>
+    <link rel="stylesheet" href="accountInfo.css">
     <link rel="stylesheet" href="../styles/general.css">
 </head>
 
 <body>
-    <!-- <script type="module" src="index.js"></script> -->
-</body>
 
+    <div class="account-card">
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="title">Account Info</div>
+            <div class="nav-menu">
+                <button class="nav-btn active">Profile</button>
+                <button class="nav-btn">Privacy & Security</button>
+                <button class="nav-btn">Personal Preferences</button>
+            </div>
+        </div>
+
+        <!-- Main Content Feed Area -->
+        <div class="content-feed">
+            
+            <!-- SECTION 1: Account Information -->
+            <div class="feed-section open">
+                <div class="section-header">
+                    <h2>Account Information</h2>
+                    <div class="header-actions">
+                        <button class="edit-btn">Edit</button>
+                        <i class="fa-solid fa-chevron-up toggle-icon"></i>
+                    </div>
+                </div>
+                
+                <div class="section-content">
+                    <!-- Profile Picture Upload Row -->
+                    <div class="profile-pic-container">
+                        <div class="avatar-placeholder">
+                            <i class="fa-solid fa-user"></i>
+                        </div>
+                        <div class="upload-controls">
+                            <label href="#" class="upload-btn">
+                                <input type="file" accept="image/*" hidden>
+                                Change Photo
+                            </label>
+                            <p class="upload-hint">JPG or PNG. Max 2MB</p>
+                        </div>
+                    </div>
+
+                    <!-- Info Grid -->
+                    <div class="info-grid">
+                        <div class="info-group">
+                            <label>First Name</label>
+                            <div class="value">Rafael</div>
+                        </div>
+                        <div class="info-group">
+                            <label>Last Name</label>
+                            <div class="value">Rodrigues</div>
+                        </div>
+                        <div class="info-group full-width">
+                            <label>Email Address</label>
+                            <div class="value">rafael@gmail.com</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SECTION 2: Username & Password -->
+            <div class="feed-section closed">
+                <div class="section-header">
+                    <h2>Username & Password</h2>
+                    <i class="fa-solid fa-chevron-down toggle-icon"></i>
+                </div>
+                <div class="section-content">
+                    <div class="info-grid">
+                        <div class="info-group">
+                            <label>Username</label>
+                            <div class="value">rafael_rodrigues</div>
+                        </div>
+                        <div class="info-group">
+                            <label>Password</label>
+                            <div class="value">••••••••••••</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</body>
 </html>
