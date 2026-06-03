@@ -16,24 +16,24 @@ var confirmPasswordSUDiv = create("div", { innerText: "Confirm Password", classN
 var sUEyeIcon = create("img", { src: "../images/view.png" });
 var sUEyeButton = create("button", { className: "eyeButton" }, sUEyeIcon);
 var passwordSUWrapper = create("div", { className: "passwordInputWrapper" },
-passwordSUInput, //Component shortcut for get, set and appendchild(create)
-sUEyeButton
+    passwordSUInput, //Component shortcut for get, set and appendchild(create)
+    sUEyeButton
 );
 var confirmEyeIcon = create("img", { src: "../images/view.png" });
-var confirmEyeButton = create("button", { className: "eyeButton" },confirmEyeIcon);
+var confirmEyeButton = create("button", { className: "eyeButton" }, confirmEyeIcon);
 var confirmSUWrapper = create("div", { className: "passwordInputWrapper" },
-confirmSUInput,
-confirmEyeButton
+    confirmSUInput,
+    confirmEyeButton
 );
 //adding a switch between su and li in the popup
 var tabSUIcon = create("img", { src: "../images/enter.png", className: "tabIconImg" },)
-var tabSUButton = create("button", { innerText: "Log In", className: "tabSwitch" },tabSUIcon);
+var tabSUButton = create("button", { innerText: "Log In", className: "tabSwitch" }, tabSUIcon);
 // Active indicator button for the page you are already on
 var tabSUActiveIcon = create("img", { src: "../images/profile.png", className: "tabIconImg" });
-var tabSUActiveLabel = create("button", { innerText: "Sign Up", className: "tabSwitch currentTab" },tabSUActiveIcon);
+var tabSUActiveLabel = create("button", { innerText: "Sign Up", className: "tabSwitch currentTab" }, tabSUActiveIcon);
 var tabButtonSUContainer = create("div", { className: "tabButtonContainer" },
-tabSUActiveLabel,
-tabSUButton,
+    tabSUActiveLabel,
+    tabSUButton,
 );
 
 var popupSUContentDiv = create("div", { className: "popupContainerDiv" },
@@ -65,17 +65,17 @@ var passwordLIDiv = create("div", { innerText: "Password", className: "usernameP
 var lIEyeIcon = create("img", { src: "../images/view.png" });
 var lIEyeButton = create("button", { className: "eyeButton" }, lIEyeIcon);
 var passwordLIWrapper = create("div", { className: "passwordInputWrapper" },
-passwordLIInput,
-lIEyeButton,
+    passwordLIInput,
+    lIEyeButton,
 );
 var tabLIIcon = create('img', { src: "../images/profile.png", className: "tabIconImg" })
-var tabLIButton = create("button", { innerText: "Sign Up", className: "tabSwitch" },tabLIIcon)
+var tabLIButton = create("button", { innerText: "Sign Up", className: "tabSwitch" }, tabLIIcon)
 // Active indicator button for the page you are already on
 var tabLIActiveIcon = create("img", { src: "../images/enter.png", className: "tabIconImg" });
-var tabLIActiveLabel = create("button", { innerText: "Log In", className: "tabSwitch currentTab" },tabLIActiveIcon);
+var tabLIActiveLabel = create("button", { innerText: "Log In", className: "tabSwitch currentTab" }, tabLIActiveIcon);
 var tabButtonLIContainer = create("div", { className: "tabButtonContainer" },
-tabLIActiveLabel,
-tabLIButton,
+    tabLIActiveLabel,
+    tabLIButton,
 );
 
 var popupLIContentDiv = create("div", { className: "popupContainerDiv" },
@@ -107,7 +107,7 @@ var popupLOContentDiv = create("div", { className: "logOutPopUpContainerDiv" },
 );
 // Turn it into a popup using your library and hide it initially
 var popupLODiv = createPopup(popupLOContentDiv);
-popupLODiv.classList.add("invisible"); 
+popupLODiv.classList.add("invisible");
 document.body.append(popupLODiv);
 //#endregion
 
@@ -136,7 +136,7 @@ tabSUButton.onclick = function () {
 }
 tabLIButton.onclick = function () {
     popupSUDiv.classList.remove("invisible");  // Hides and shows login popup with a manually made component(invisible)
-    popupLIDiv.classList.add("invisible");  
+    popupLIDiv.classList.add("invisible");
 };
 //#endregion
 
@@ -159,10 +159,11 @@ submitSUButton.onclick = async function () {
     else {
         alertSULI("User created successfully");
         localStorage.setItem("token", token);
- setTimeout(() => {updateNavUI(usernameSUInput.value)
+        setTimeout(() => {
+            navUpdate()
             popupSUDiv.classList.add("invisible");
-        popupLIDiv.classList.add("invisible");
-    }, 1700);
+            popupLIDiv.classList.add("invisible");
+        }, 1700);
     }
 };
 submitLIButton.onclick = async function () {
@@ -175,10 +176,11 @@ submitLIButton.onclick = async function () {
     else {
         alertSULI("User logged in successfully");
         localStorage.setItem("token", token);
-        setTimeout(() => {updateNavUI(usernameLIInput.value)
+        setTimeout(() => {
+            navUpdate()
             popupSUDiv.classList.add("invisible");
-        popupLIDiv.classList.add("invisible");
-    }, 1700);
+            popupLIDiv.classList.add("invisible");
+        }, 1700);
     }
 };
 //#endregion
@@ -195,7 +197,7 @@ confirmNoButton.onclick = function () {
 confirmYesButton.onclick = async function () {
     popupLODiv.classList.add("invisible");
     // 2. (Optional) Tell the server to invalidate the token
-   const currentToken = localStorage.getItem("token");
+    const currentToken = localStorage.getItem("token");
     // 2. Only tell the server if a token actually exists
     if (currentToken) {
         await send("logOut", currentToken);
@@ -206,10 +208,10 @@ confirmYesButton.onclick = async function () {
     loginButton.style.display = "inline-block";
     signUpButton.style.display = "inline-block";
     logOutButton.style.display = "none";
-    accountInfoButton.style.display="none";
+    accountInfoButton.style.display = "none";
     // 4. Hide the greeting and clear the name
     if (greetingContainer) {
-        greetingContainer.style.display = "none"; 
+        greetingContainer.style.display = "none";
     }
     if (nameDisplay) {
         nameDisplay.innerText = ""; // Clear the text just in case
@@ -218,41 +220,31 @@ confirmYesButton.onclick = async function () {
 };
 //#endregion
 
-//#region REMOVING SU/LI BUTTONS AND ADDING GREETING
+//#region ALWAYS NAV UPDATING FUNCTION
 var greetingContainer = document.getElementById("userGreeting");
-var nameDisplay = document.getElementById("userNameDisplay");
-function updateNavUI(username: string) {
-    //Hiding the Login and Sign Up buttons using your existing variables
-    loginButton.style.display = "none";
-    signUpButton.style.display = "none";
-    logOutButton.style.display = "inline-block";
-    accountInfoButton.style.display="inline-block";
-    // Making the container visible and set the text
-    if (greetingContainer) {
-        greetingContainer.style.display = "flex"; 
-    }
-    if (nameDisplay) {
-        nameDisplay.innerText = username; 
-    }
-}
-//SERVER USERNAME FETCH
-async function fetchAndSetUserUi(){
+var nameDisplay = document.getElementById("userNameDisplay")!;
+async function navUpdate() {
     var token = localStorage.getItem("token");
-if (!token) return; // No token, no need to fetch
-    try {
-        // You'll need an endpoint on your server that returns user info
-        // It should accept the token (or have it in the header)
-        const userData = await send<{username: string}>("getUserInfo", token);
-
-        if (userData) {
-            updateNavUI(userData.username);
+    var user = await send<any>("getUser", token);
+    if (user == null) {
+        loginButton.style.display = "inline-block";
+        signUpButton.style.display = "inline-block";
+        logOutButton.style.display = "none";
+        accountInfoButton.style.display = "none";
+    }
+    else {
+        loginButton.style.display = "none";
+        signUpButton.style.display = "none" ;
+        logOutButton.style.display = "inline-block";
+        accountInfoButton.style.display = "inline-block";
+        if (greetingContainer) {
+            greetingContainer.style.display = "flex";
         }
-    } catch (error) {
-        // If the token is invalid or expired, clear it
-        console.error("Token is invalid");
-        localStorage.removeItem("token");
+        console.log(user);
+        nameDisplay.innerText = user.username;
     }
 }
+navUpdate();
 //#endregion
 
 //#region SU/LI EVENTLISTNER FOR PASSWORD SECURITY

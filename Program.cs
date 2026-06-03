@@ -11,7 +11,6 @@ class Database() : DatabaseCore("database")
 {
   public DbSet<User> Users { get; set; } = default!;
 }
-
 class User(string username, string password, string token)
 {
   public int Id { get; set; } = default!;
@@ -40,6 +39,12 @@ class Program
 
       try
       {
+        if (request.Name == "getUser")
+        {
+          var token = request.GetParams<string>();
+          var user = database.Users.FirstOrDefault(u => u.Token == token);
+          request.Respond(user);
+        }
         if (request.Name == "signUp")
         {
           var (username, password) = request.GetParams<(string, string)>();
