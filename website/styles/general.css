@@ -2,9 +2,7 @@
     background: rgba(0, 0, 0, 0.4);
     width: 100vw;
     height: 100vh;
-
     position: fixed;
-
     display: flex;
     align-items: center;
     justify-content: center;
@@ -12,7 +10,7 @@
 
 .popupBodyDiv {
     background: white;
-    width: 500px;
+    min-width:500px;
     /* height: 800px; */
     min-height: 100px;
     padding-top: 50px;
