@@ -4,7 +4,16 @@ body {
     margin: 0;
 }
 
-/* Base Modal Container adjustments */
+/* ================================ */
+/* GLOBAL HIGHLIGHT COLOR           */
+/* ================================ */
+/* This changes the click-and-drag highlight color everywhere on your entire website */
+::selection {
+    background-color: #55efc4; /* Your green */
+    color: #000; /* Keeps the text black so it is readable when highlighted */
+}
+
+/* #region POST CONTENT SECTION */
 .popupContainerDiv {
     display: flex;
     align-items: center;
@@ -12,10 +21,9 @@ body {
     width: 100vw;
     height: 100vh;
     box-sizing: border-box;
-    background-color: rgba(0, 0, 0, 0.05); /* Soft overlay background */
+    background-color: rgba(0, 0, 0, 0.05);
 }
 
-/* Main Layout Split */
 .editor-layout-container {
     display: flex;
     width: 1100px;
@@ -38,17 +46,14 @@ body {
     border-right: 1px solid #eef0f2;
 }
 
-.sidebar-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
+.sidebar-group { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 8px; 
+    position: relative; /* Context for dropdown overlay positioning */
 }
 
-.sidebar-group label {
-    font-size: 14px;
-    font-weight: 600;
-    color: #111;
-}
+.sidebar-group label { font-size: 14px; font-weight: 600; color: #111; }
 
 .sidebar-input {
     width: 100%;
@@ -60,11 +65,7 @@ body {
     box-sizing: border-box;
 }
 
-.sidebar-hint {
-    font-size: 11px;
-    color: #8a8a8a;
-    line-height: 1.4;
-}
+.sidebar-hint { font-size: 11px; color: #8a8a8a; line-height: 1.4; }
 
 .publish-btn {
     margin-top: auto;
@@ -79,9 +80,7 @@ body {
     transition: background 0.2s;
 }
 
-.publish-btn:hover {
-    background-color: #009443;
-}
+.publish-btn:hover { background-color: #009443; }
 
 /* RIGHT MAIN CANVAS */
 .editor-main {
@@ -91,7 +90,6 @@ body {
     flex-direction: column;
 }
 
-/* Navbar simulation inside editor */
 .editor-nav {
     display: flex;
     justify-content: space-between;
@@ -100,26 +98,10 @@ body {
     border-bottom: 1px solid #f0f0f0;
 }
 
-.logo {
-    font-weight: 800;
-    letter-spacing: 2px;
-    font-size: 15px;
-}
-
-.nav-center {
-    display: flex;
-    gap: 20px;
-    color: #666;
-    font-size: 13px;
-    font-weight: 500;
-}
-
-.nav-create {
-    font-size: 13px;
-    font-weight: 600;
-}
-
-/* Canvas Area */
+.webName { font-weight: 800; letter-spacing: 2px; font-size: 15px; }
+.topCenterText { display: flex; gap: 20px; color: #666; font-size: 13px; font-weight: 500; }
+.topLeftText { font-size: 13px; font-weight: 600; }
+.topRightText{font-weight: 700;}
 .editor-canvas {
     padding: 40px 60px;
     overflow-y: auto;
@@ -139,7 +121,6 @@ body {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    position: relative;
 }
 
 .input-group label {
@@ -158,74 +139,179 @@ body {
     color: #333;
 }
 
-/* Text Editor & Highlights */
+/* ================================ */
+/* NEW FUNCTIONAL EDITOR STYLES     */
+/* ================================ */
+
 .text-editor-box {
-    position: relative;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #333;
-}
-
-/* The Green Selection Highlight requested */
-.highlight-green {
-    background-color: #55efc4; /* Crisp light green marker effect */
-    color: #000;
-    padding: 2px 4px;
-    border-radius: 2px;
-    font-weight: 500;
-}
-
-/* Paid Content Splitter line */
-.paid-divider {
-    display: flex;
-    align-items: center;
-    text-align: center;
-    margin: 25px 0;
-    color: #b2bec3;
-    font-size: 10px;
-    letter-spacing: 1.5px;
-    font-weight: 600;
-}
-
-.paid-divider::before, .paid-divider::after {
-    content: '';
-    flex: 1;
-    border-bottom: 1px dashed #dfe6e9;
-}
-
-.paid-divider:not(:empty)::before { margin-right: 1em; }
-.paid-divider:not(:empty)::after { margin-left: 1em; }
-
-/* Floating popover Toolbar Simulation */
-.floating-toolbar {
-    position: absolute;
-    top: 55px;
-    left: 30%;
-    background-color: #2d3436;
+    border: 1px solid #e8e8e8;
     border-radius: 6px;
-    padding: 4px 8px;
+    background-color: #fafafa;
     display: flex;
-    gap: 8px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-    z-index: 10;
+    flex-direction: column;
+    overflow: hidden;
 }
 
-.floating-toolbar button {
-    background: none;
-    border: none;
-    color: white;
-    font-size: 11px;
-    font-weight: bold;
-    padding: 6px 8px;
+/* Static Toolbar Style */
+.editor-toolbar {
+    display: flex;
+    gap: 6px;
+    padding: 8px 12px;
+    background-color: #f1f3f4;
+    border-bottom: 1px solid #e8e8e8;
+    align-items: center;
+}
+
+.toolbar-btn {
+    background: transparent;
+    border: 1px solid transparent;
+    color: #333;
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 10px;
     cursor: pointer;
     border-radius: 4px;
+    transition: all 0.2s;
 }
 
-.floating-toolbar button:hover {
-    background-color: #4b5563;
+.toolbar-btn:hover {
+    background-color: #e2e6ea;
+    border: 1px solid #cbd5e1;
+}
+
+.toolbar-btn.bold { font-weight: 800; }
+.toolbar-btn.italic { font-style: italic; }
+.toolbar-btn.underline { text-decoration: underline; }
+
+.toolbar-btn.highlight-btn {
+    background-color: #55efc4;
+    color: #000;
+    border: 1px solid #00b894;
+}
+
+.toolbar-btn.highlight-btn:hover {
+    background-color: #00b894;
+    color: white;
+}
+
+.toolbar-divider {
+    width: 1px;
+    height: 20px;
+    background-color: #d1d5db;
+    margin: 0 4px;
+}
+
+/* The actual text input area */
+.rich-text-editor {
+    min-height: 300px;
+    padding: 15px 20px;
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    background-color: #fff;
+    outline: none;
+    overflow-y: auto;
+    
+    /* THE FIX FOR THE DROPPING LINE ISSUE */
+    word-wrap: break-word; /* FORCES LONG WORDS TO BREAK AND DROP A LINE */
+    white-space: pre-wrap; /* RESPECTS YOUR ENTER KEYS BUT KEEPS TEXT CONTAINED */
+    max-width: 100%; /* ENSURES IT NEVER GROWS WIDER THAN ITS PARENT */
+}
+
+.rich-text-editor p {
+    margin-top: 0;
 }
 
 /* Hidden Utility State */
 .invisible {
     display: none !important;
 }
+/* #endregion */
+
+.tag-remove-btn {
+    cursor: pointer; 
+    user-select: none; 
+    color: #ff7675;
+    margin-left: 4px;
+}
+
+/* The tag chips themselves */
+.tag-chip {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e2e8f0;
+    color: #333;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: default;
+    user-select: none;
+}
+
+.selected-tags-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-bottom: 4px;
+}
+
+/* Dropdown menu rules */
+.tags-dropdown {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    max-height: 180px;
+    overflow-y: auto;
+    background-color: white;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+    z-index: 100;
+    box-sizing: border-box;
+}
+
+/* The items inside the dropdown menu */
+.dropdown-item {
+    padding: 10px 12px;
+    font-size: 13px;
+    color: #333;
+    cursor: pointer;
+    user-select: none;
+}
+
+.dropdown-item:hover {
+    background-color: #f1f5f9;
+}
+
+/* The main "Select Tags" button */
+.add-tag-btn {
+    width: 100%;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #475569;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.15s;
+}
+
+.add-tag-btn:hover {
+    background-color: #f8fafc;
+    border-color: #94a3b8;
+}
+/* Forcing the headings to start as normal weight so the 'B' button can handle boldness independently */
+.rich-text-editor h1,
+.rich-text-editor h2,
+.rich-text-editor h3 {
+    font-weight: normal;
+}
+
+.rich-text-editor h3 { font-size: 2rem; margin: 10px 0; } /* BIG TITLE */
+.rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; }  /* MEDIUM SUBTITLE */
+.rich-text-editor h1 { font-size: 1rem; margin: 5px 0; }  /* NORMAL SMALL */
+/* Forcing the editor to follow your custom heading size rules */
