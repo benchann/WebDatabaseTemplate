@@ -315,3 +315,121 @@ body {
 .rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; }  /* MEDIUM SUBTITLE */
 .rich-text-editor h1 { font-size: 1rem; margin: 5px 0; }  /* NORMAL SMALL */
 /* Forcing the editor to follow your custom heading size rules */
+/* ==================== IMPROVED SULI POPUP ==================== */
+.suli-popup {
+    background: #ffffff;
+    width: 400px;
+    max-width: 90vw;
+    border-radius: 16px;
+    padding: 48px 40px 40px;
+    text-align: center;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+    border: 1px solid #f0f0f0;
+    animation: popupFadeIn 0.25s ease forwards;
+}
+
+@keyframes popupFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(30px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+.suli-lock {
+    font-size: 52px;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+.suli-popup h2 {
+    font-size: 26px;
+    font-weight: 700;
+    color: #111;
+    margin: 0 0 12px 0;
+}
+
+.suli-message {
+    color: #555;
+    font-size: 15.5px;
+    line-height: 1.5;
+    margin-bottom: 36px;
+}
+
+.suli-buttons {
+    display: flex;
+    gap: 14px;
+}
+
+.suli-cancel,
+.suli-continue {
+    flex: 1;
+    padding: 15px 20px;
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.suli-cancel {
+    background: #f8f9fa;
+    color: #333;
+}
+
+.suli-cancel:hover {
+    background: #f0f0f0;
+}
+
+.suli-continue {
+    background: #00b050;
+    color: white;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.suli-continue:hover {
+    background: #009443;
+    transform: translateY(-1px);
+}
+
+/* Top navigation fix */
+nav, .top-nav, .header {  /* Adjust selector to match your actual nav */
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 24px;
+    background: white;
+    border-bottom: 1px solid #eee;
+}
+
+nav a, .top-nav a {
+    color: #00b050;
+    text-decoration: none;
+    font-weight: 500;
+}
+.top-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 30px;
+    background: #ffffff;
+    border-bottom: 1px solid #e8e8e8;
+}
+
+.back-to-login {
+    color: #00b050;
+    font-weight: 500;
+    text-decoration: none;
+    font-size: 15px;
+}
+
+.back-to-login:hover {
+    text-decoration: underline;
+}

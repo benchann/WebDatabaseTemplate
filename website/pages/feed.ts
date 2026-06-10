@@ -77,7 +77,6 @@ var tagsGroup = create("div", { className: "sidebar-group" },
 
 var publishButton = create("button", { textContent: "Publish", className: "publish-btn" });
 //#endregion
-//#endregion
 
 //#region FILE HANDLING (NEW)
 // STORES SELECTED FILES FOR FUTURE DATABASE INTEGRATION
@@ -259,19 +258,45 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
         )
     )
 ) as HTMLDivElement;
-//#endregion
-
-//#region POPUP INITIALIZATION
+// ==================== ARTICLE EDITOR POPUP ====================
 var articlePopUpDiv = createPopup(articleContentCreationPopUp) as HTMLDivElement;
 articlePopUpDiv.classList.add("invisible");
-document.body.append(articlePopUpDiv);
+document.body.appendChild(articlePopUpDiv);
 
-createArticleButton.onclick = function (): void {
-    articlePopUpDiv.classList.remove("invisible");
+// ==================== SULI (LOGIN REQUIRED) POPUP ====================
+const suliPopupContent = create("div", { className: "suli-popup" },
+    create("div", { className: "suli-lock" }, "🔒"),
+    create("h2", { textContent: "Sign in required" }),
+    create("p", { textContent: "You must be logged in to create an article.",className: "suli-message"}),
+    create("div", { className: "suli-buttons" },
+        create("button", { 
+            textContent: "Cancel",
+            className: "suli-cancel",
+            onclick: () => suliPopup.classList.add("invisible")
+        }),
+        create("a", { 
+            textContent: "Continue to Login or SignUp",
+            className: "suli-continue",
+            href: "index.html"
+        })
+    )
+);
+const suliPopup = createPopup(suliPopupContent) as HTMLDivElement;
+suliPopup.classList.add("invisible");
+document.body.appendChild(suliPopup);
+// ==================== BUTTON LOGIC (ONLY THIS WAS FIXED) ====================
+createArticleButton.onclick = async function () {
+    var token = localStorage.getItem("token");
+    var user = await send<any>("getUser", token);
+    
+    if (user == null) {
+        suliPopup.classList.remove("invisible");
+    } else {
+        articlePopUpDiv.classList.remove("invisible");
+    }
 };
 
-publishButton.onclick = function(): void {
+publishButton.onclick = function() {
     articlePopUpDiv.classList.add("invisible");
-    // TODO: COLLECT attachedFiles + richTextEditor.innerHTML FOR DATABASE
+    // TODO: Add your publish logic here
 };
-//#endregion

@@ -18,6 +18,7 @@ class User(string username, string password, string token)
   public string Password { get; set; } = password;
   public string Token { get; set; } = token;
 }
+
 class Program
 {
   static void Main()
