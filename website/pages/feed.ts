@@ -2,15 +2,6 @@ import { send } from "clientUtilities";
 import { createPopup } from "components/popup";
 import { create, get } from "componentUtilities";
 
-//#region CREATE ARTICLE
-var createArticleButton = get("button", "createArticleButton") as HTMLButtonElement;
-
-//#region HELPER FUNCTION TO FORMAT TEXT INSIDE THE CANVAS
-var formatText = (command: string, value: string | null = null): void => {
-    document.execCommand(command, false, value || "");
-};
-//#endregion
-
 //#region DYNAMIC TAG SELECTOR
 var availableTags: string[] = [
     "Architecture", "Technology", "Agriculture", 
@@ -78,62 +69,7 @@ var tagsGroup = create("div", { className: "sidebar-group" },
 var publishButton = create("button", { textContent: "Publish", className: "publish-btn" });
 //#endregion
 
-//#region FILE HANDLING (NEW)
-// STORES SELECTED FILES FOR FUTURE DATABASE INTEGRATION
-var attachedFiles: File[] = [];
-var attachedFilesContainer = create("div", { className: "attached-files-container" });
-
-// FUNCTION TO UPDATE THE VISUAL LIST OF ATTACHED FILES
-var updateAttachedFilesDisplay = function(): void {
-    attachedFilesContainer.innerHTML = "";
-    attachedFiles.forEach(function(file, index) {
-        var removeBtn = create("span", {
-            textContent: " ✕",
-            className: "tag-remove-btn",
-            onclick: function() {
-                attachedFiles.splice(index, 1);
-                updateAttachedFilesDisplay();
-            }
-        });
-        var fileChip = create("div", { className: "tag-chip" }, file.name, removeBtn);
-        attachedFilesContainer.appendChild(fileChip);
-    });
-};
-
-// HIDDEN FILE INPUT FOR "ADD FILES"
-var fileInput = create("input", {
-    type: "file",
-    multiple: true,
-    style: { display: "none" },
-    onchange: function(e: Event) {
-        var input = e.target as HTMLInputElement;
-        if (input.files) {
-            attachedFiles.push(...Array.from(input.files));
-            updateAttachedFilesDisplay();
-        }
-    }
-} as any);
-
-var addFilesBtn = create("button", {
-    textContent: "Add Files",
-    className: "add-tag-btn",
-    onclick: function(e: MouseEvent) {
-        e.preventDefault();
-        fileInput.click();
-    }
-});
-
-var filesGroup = create("div", { className: "sidebar-group" },
-    create("label", { textContent: "Attachments" }),
-    attachedFilesContainer,
-    addFilesBtn,
-    fileInput,
-    create("span", { textContent: "Files will appear at the bottom of your article.", className: "sidebar-hint" })
-);
-//#endregion
-
-//#region RICH TEXT EDITOR PLACEHOLDER FIX (SINGLE CLICK SOLUTION)
-// IMPROVED PLACEHOLDER LOGIC - CLEARS ON FIRST CLICK AND PLACES CURSOR IMMEDIATELY
+//#region RICH TEXT EDITOR PLACEHOLDER FIX
 var createEditorWithPlaceholder = () => {
     const editor = create("div", {
         className: "rich-text-editor",
@@ -141,11 +77,9 @@ var createEditorWithPlaceholder = () => {
         innerHTML: "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>"
     }) as HTMLDivElement;
 
-    // SINGLE CLICK FOCUS FIX - REMOVES PLACEHOLDER ON FIRST INTERACTION
     editor.addEventListener("focus", function() {
         if (editor.innerHTML.includes("editor-placeholder")) {
             editor.innerHTML = "<p><br></p>";
-            // PLACE CURSOR AT START IMMEDIATELY
             const range = document.createRange();
             const sel = window.getSelection();
             range.setStart(editor.firstChild!, 0);
@@ -155,7 +89,6 @@ var createEditorWithPlaceholder = () => {
         }
     });
 
-    // RESTORE PLACEHOLDER IF USER LEAVES EDITOR EMPTY
     editor.addEventListener("blur", function() {
         if (editor.innerHTML.trim() === "" || editor.innerHTML === "<p><br></p>") {
             editor.innerHTML = "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>";
@@ -168,15 +101,18 @@ var createEditorWithPlaceholder = () => {
 var richTextEditor = createEditorWithPlaceholder();
 //#endregion
 
+//#region HELPER FUNCTION TO FORMAT TEXT
+var formatText = (command: string, value: string | null = null): void => {
+    document.execCommand(command, false, value || "");
+};
+//#endregion
+
 //#region ARTICLE CONTENT POPUP CONSTRUCTION
 var articleContentCreationPopUp = create("div", { className: "editor-layout-container" },
-    // LEFT SIDEBAR
     create("div", { className: "editor-sidebar" },
         tagsGroup,
-        filesGroup,           // NEW: ATTACHMENTS SECTION
         publishButton
     ),
-    // RIGHT MAIN CONTENT
     create("div", { className: "editor-main" },
         create("div", { className: "editor-nav" },
             create("div", { className: "topLeftText" },
@@ -196,20 +132,20 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
             create("h2", { textContent: "Create content", className: "canvas-heading" }),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Title Of The Post" }),
-                create("input", { type: "text", placeholder: "Add a title to your post", className: "title-input" })
+                create("input", { id: "titleInput", type: "text", placeholder: "Add a title to your post", className: "title-input" })
             ),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Content" }),
                 create("div", { className: "text-editor-box" },
                     // TOOLBAR
                     create("div", { className: "editor-toolbar" },
-                        create("button", { textContent: "H1", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H1") }),
-                        create("button", { textContent: "H2", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H2") }),
-                        create("button", { textContent: "H3", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H3") }),
+                        create("button", { textContent: "H1", title:"Normal Size", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H1") }),
+                        create("button", { textContent: "H2", title:"Subtitle Size", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H2") }),
+                        create("button", { textContent: "H3", title:"Title Size", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H3") }),
                         create("div", { className: "toolbar-divider" }),
-                        create("button", { textContent: "B", className: "toolbar-btn bold", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("bold") }),
-                        create("button", { textContent: "I", className: "toolbar-btn italic", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("italic") }),
-                        create("button", { textContent: "U", className: "toolbar-btn underline", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("underline") }),
+                        create("button", { textContent: "B", title:"Bolder Text", className: "toolbar-btn bold", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("bold") }),
+                        create("button", { textContent: "I", title:"Italic Text", className: "toolbar-btn italic", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("italic") }),
+                        create("button", { textContent: "U", title:"Underline Text", className: "toolbar-btn underline", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("underline") }),
                         create("div", { className: "toolbar-divider" }),
                         create("button", { textContent: "⫷", title: "Align Left", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("justifyLeft") }),
                         create("button", { textContent: "≣", title: "Align Center", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("justifyCenter") }),
@@ -217,29 +153,6 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
                         create("div", { className: "toolbar-divider" }),
                         create("button", { textContent: "•≡", title: "Bullet List", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("insertUnorderedList") }),
                         create("button", { textContent: "1≡", title: "Numbered List", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("insertOrderedList") }),
-                        create("div", { className: "toolbar-divider" }),
-                        // IMAGE INSERT BUTTON (NEW)
-                        create("button", { 
-                            textContent: "🖼️", 
-                            title: "Add Picture", 
-                            className: "toolbar-btn",
-                            onmousedown: (e: MouseEvent) => e.preventDefault(),
-                            onclick: () => {
-                                const imgInput = document.createElement("input");
-                                imgInput.type = "file";
-                                imgInput.accept = "image/*";
-                                imgInput.onchange = () => {
-                                    if (imgInput.files && imgInput.files[0]) {
-                                        const reader = new FileReader();
-                                        reader.onload = (ev) => {
-                                            formatText("insertImage", ev.target!.result as string);
-                                        };
-                                        reader.readAsDataURL(imgInput.files[0]);
-                                    }
-                                };
-                                imgInput.click();
-                            }
-                        }),
                         create("div", { className: "toolbar-divider" }),
                         create("input", {
                             type: "color",
@@ -251,40 +164,19 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
                             }
                         })
                     ),
-                    // THE ACTUAL EDITABLE AREA
                     richTextEditor
                 )
             )
         )
     )
 ) as HTMLDivElement;
-// ==================== ARTICLE EDITOR POPUP ====================
+
+// ==================== POPUP INJECTIONS ====================
 var articlePopUpDiv = createPopup(articleContentCreationPopUp) as HTMLDivElement;
 articlePopUpDiv.classList.add("invisible");
 document.body.appendChild(articlePopUpDiv);
 
-// ==================== SULI (LOGIN REQUIRED) POPUP ====================
-const suliPopupContent = create("div", { className: "suli-popup" },
-    create("div", { className: "suli-lock" }, "🔒"),
-    create("h2", { textContent: "Sign in required" }),
-    create("p", { textContent: "You must be logged in to create an article.",className: "suli-message"}),
-    create("div", { className: "suli-buttons" },
-        create("button", { 
-            textContent: "Cancel",
-            className: "suli-cancel",
-            onclick: () => suliPopup.classList.add("invisible")
-        }),
-        create("a", { 
-            textContent: "Continue to Login or SignUp",
-            className: "suli-continue",
-            href: "index.html"
-        })
-    )
-);
-const suliPopup = createPopup(suliPopupContent) as HTMLDivElement;
-suliPopup.classList.add("invisible");
-document.body.appendChild(suliPopup);
-// ==================== BUTTON LOGIC (ONLY THIS WAS FIXED) ====================
+var createArticleButton = get("button", "createArticleButton") as HTMLButtonElement;
 createArticleButton.onclick = async function () {
     var token = localStorage.getItem("token");
     var user = await send<any>("getUser", token);
@@ -296,7 +188,117 @@ createArticleButton.onclick = async function () {
     }
 };
 
-publishButton.onclick = function() {
-    articlePopUpDiv.classList.add("invisible");
-    // TODO: Add your publish logic here
+const suliPopupContent = create("div", { className: "suli-popup" },
+    create("div", { className: "suli-lock" }, "🔒"),
+    create("h2", { textContent: "Sign in required" }),
+    create("p", { textContent: "You must be logged in to create an article.", className: "suli-message"}),
+    create("div", { className: "suli-buttons" },
+        create("button", { 
+            textContent: "Cancel",
+            className: "suli-cancel",
+            onclick: () => suliPopup.classList.add("invisible")
+        }),
+        create("a", {
+            textContent: "Continue to Sign In",
+            className: "suli-continue",
+            href: "index.html"
+        })
+    )
+);
+const suliPopup = createPopup(suliPopupContent) as HTMLDivElement;
+suliPopup.classList.add("invisible");
+document.body.appendChild(suliPopup);
+
+//#region FEED RENDER LOOPER
+var loadFeedStream = async function(): Promise<void> {
+    // Dynamically query to ensure DOM lifecycle availability
+    const feedStream = document.getElementById("feedStream") as HTMLDivElement;
+    if (!feedStream) return;
+
+    feedStream.innerHTML = "";
+    var articles = await send<any[]>("getArticles");
+
+    if (!articles || articles.length === 0) {
+        feedStream.appendChild(create("div", { textContent: "No articles shared yet. Be the first to publish!", className: "no-articles-card" }));
+        return;
+    }
+
+    articles.forEach(function(article) {
+        var displayTitle = article.Title || article.title || "";
+        var displayTags = article.Tags || article.tags || "";
+        var displayContent = article.Content || article.content || "";
+        var displayAuthor = article.AuthorUsername || article.authorUsername || "anonymous";
+
+        var card = create("div", { className: "article-card" });
+        var header = create("div", { className: "article-card-header" });
+        var title = create("h2", { textContent: displayTitle, className: "article-card-title" });
+        var tagsContainer = create("div", { className: "article-card-tags" });
+
+        if (displayTags) {
+            displayTags.split(",").forEach(function(tag: string) {
+                if (tag.trim() !== "") {
+                    tagsContainer.appendChild(create("span", { textContent: tag, className: "article-card-tag-chip" }));
+                }
+            });
+        }
+
+        header.appendChild(title);
+        header.appendChild(tagsContainer);
+
+        var meta = create("div", { textContent: "Published by u/" + displayAuthor, className: "article-card-meta" });
+        var content = create("div", { className: "article-card-content" });
+        content.innerHTML = displayContent;
+
+        var toggleBtn = create("button", { textContent: "Read More", className: "article-card-toggle" });
+        toggleBtn.onclick = function() {
+            if (card.classList.contains("expanded")) {
+                card.classList.remove("expanded");
+                toggleBtn.textContent = "Read More";
+            } else {
+                card.classList.add("expanded");
+                toggleBtn.textContent = "Show Less";
+            }
+        };
+
+        card.appendChild(header);
+        card.appendChild(meta);
+        card.appendChild(content);
+        card.appendChild(toggleBtn);
+        feedStream.appendChild(card);
+    });
 };
+
+// ==================== INTERACTION ACTION HANDLERS ====================
+// FIXED: Added missing async signature and updated dynamic variable selector scoping
+publishButton.onclick = async function() {
+    const titleInput = document.getElementById("titleInput") as HTMLInputElement;
+    if (!titleInput) return;
+
+    var titleVal = titleInput.value.trim();
+    var contentVal = richTextEditor.innerHTML.trim();
+    var token = localStorage.getItem("token");
+
+    if (!titleVal || contentVal === "" || contentVal === "<p><br></p>" || contentVal.includes("editor-placeholder")) {
+        alert("Please add a title and write content before publishing.");
+        return;
+    }
+
+    var tagsString = selectedTags.join(",");
+    
+    // FIXED: Swapped parameters grouping from a standard tuple evaluation sequence into an explicit array array mapping bounds [...]
+    var success = await send<boolean>("publishArticle", [titleVal, contentVal, tagsString, token]);
+    if (success) {
+        titleInput.value = "";
+        richTextEditor.innerHTML = "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>";
+        selectedTags = [];
+        updateTagsDisplay();
+        
+        articlePopUpDiv.classList.add("invisible");
+        loadFeedStream();
+    } else {
+        alert("Failed to publish your article. Verify your session.");
+    }
+};
+
+// Initial invocation on source resolution execution boundaries
+loadFeedStream();

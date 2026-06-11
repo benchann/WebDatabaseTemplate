@@ -10,15 +10,8 @@ using Project.ServerUtilities;
 class Database() : DatabaseCore("database")
 {
   public DbSet<User> Users { get; set; } = default!;
+  public DbSet<Article> Articles { get; set; } = default!;
 }
-class User(string username, string password, string token)
-{
-  public int Id { get; set; } = default!;
-  public string Username { get; set; } = username;
-  public string Password { get; set; } = password;
-  public string Token { get; set; } = token;
-}
-
 class Program
 {
   static void Main()
@@ -70,6 +63,41 @@ class Program
 
           request.Respond(user?.Token);
         }
+        else if (request.Name == "publishArticle")
+        {
+          var (title, content, tags, token) = request.GetParams<(string, string, string, string)>();
+          var user = database.Users.FirstOrDefault(u => u.Token == token);
+          
+          if (user == null)
+          {
+            request.Respond(false);
+            continue;
+          }
+
+          var article = new Article(title, content, tags, user.Id);
+          database.Articles.Add(article);
+          database.SaveChanges();
+
+          request.Respond(true);
+        }
+        else if (request.Name == "getArticles")
+        {
+          // FIXED: Restored the proper query so it sends the AuthorUsername back to your TypeScript
+          var feedData = database.Articles
+            .Include(a => a.User)
+            .OrderByDescending(a => a.Id)
+            .Select(a => new
+            {
+              a.Id,
+              a.Title,
+              a.Content,
+              a.Tags,
+              AuthorUsername = a.User.Username
+            })
+            .ToList();
+            
+          request.Respond(feedData);
+        }
       }
       catch (Exception exception)
       {
@@ -78,4 +106,20 @@ class Program
       }
     }
   }
+}
+class User(string username, string password, string token)
+{
+  public int Id { get; set; } = default!;
+  public string Username { get; set; } = username;
+  public string Password { get; set; } = password;
+  public string Token { get; set; } = token;
+}
+class Article(string title, string content, string tags, int userId)
+{
+  public int Id { get; set; } = default!;
+  public string Title { get; set; } = title;
+  public string Content { get; set; } = content;
+  public string Tags { get; set; } = tags;
+  public int UserId { get; set; } = userId;
+  public User User { get; set; } = default!;
 }

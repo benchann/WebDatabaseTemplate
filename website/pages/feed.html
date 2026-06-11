@@ -1,15 +1,21 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>feedPage</title>
     <link rel="stylesheet" href="feed.css">
     <link rel="stylesheet" href="../styles/general.css">
 </head>
-
 <body>
-    <button id="createArticleButton" class="createArticleButton">Create Article</button>
+    <div class="page-layout-wrapper">
+        <div class="side-panel">
+            <h3>SciZone Hub</h3>
+            <p>Publish research notes, articles, and scientific findings directly to the stream.</p>
+            <button id="createArticleButton" class="createArticleButton">Create Article</button>
+        </div>
+
+        <div id="feedStream" class="feed-stream"></div>
+    </div>
+
     <script type="module" src="feed.js"></script>
 </body>
-
 </html>

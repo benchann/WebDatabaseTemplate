@@ -7,10 +7,9 @@ body {
 /* ================================ */
 /* GLOBAL HIGHLIGHT COLOR           */
 /* ================================ */
-/* This changes the click-and-drag highlight color everywhere on your entire website */
 ::selection {
     background-color: #55efc4; /* Your green */
-    color: #000; /* Keeps the text black so it is readable when highlighted */
+    color: #000;
 }
 
 /* #region POST CONTENT SECTION */
@@ -50,7 +49,7 @@ body {
     display: flex; 
     flex-direction: column; 
     gap: 8px; 
-    position: relative; /* Context for dropdown overlay positioning */
+    position: relative;
 }
 
 .sidebar-group label { font-size: 14px; font-weight: 600; color: #111; }
@@ -139,10 +138,7 @@ body {
     color: #333;
 }
 
-/* ================================ */
 /* NEW FUNCTIONAL EDITOR STYLES     */
-/* ================================ */
-
 .text-editor-box {
     border: 1px solid #e8e8e8;
     border-radius: 6px;
@@ -211,11 +207,9 @@ body {
     background-color: #fff;
     outline: none;
     overflow-y: auto;
-    
-    /* THE FIX FOR THE DROPPING LINE ISSUE */
-    word-wrap: break-word; /* FORCES LONG WORDS TO BREAK AND DROP A LINE */
-    white-space: pre-wrap; /* RESPECTS YOUR ENTER KEYS BUT KEEPS TEXT CONTAINED */
-    max-width: 100%; /* ENSURES IT NEVER GROWS WIDER THAN ITS PARENT */
+    word-wrap: break-word;
+    white-space: pre-wrap;
+    max-width: 100%;
 }
 
 .rich-text-editor p {
@@ -272,7 +266,6 @@ body {
     box-sizing: border-box;
 }
 
-/* The items inside the dropdown menu */
 .dropdown-item {
     padding: 10px 12px;
     font-size: 13px;
@@ -304,85 +297,77 @@ body {
     background-color: #f8fafc;
     border-color: #94a3b8;
 }
-/* Forcing the headings to start as normal weight so the 'B' button can handle boldness independently */
+
 .rich-text-editor h1,
 .rich-text-editor h2,
 .rich-text-editor h3 {
     font-weight: normal;
 }
 
-.rich-text-editor h3 { font-size: 2rem; margin: 10px 0; } /* BIG TITLE */
-.rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; }  /* MEDIUM SUBTITLE */
-.rich-text-editor h1 { font-size: 1rem; margin: 5px 0; }  /* NORMAL SMALL */
-/* Forcing the editor to follow your custom heading size rules */
-/* ==================== IMPROVED SULI POPUP ==================== */
-.suli-popup {
-    background: #ffffff;
-    width: 400px;
-    max-width: 90vw;
-    border-radius: 16px;
-    padding: 48px 40px 40px;
-    text-align: center;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
-    border: 1px solid #f0f0f0;
-    animation: popupFadeIn 0.25s ease forwards;
-}
+.rich-text-editor h3 { font-size: 2rem; margin: 10px 0; }
+.rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; }
+.rich-text-editor h1 { font-size: 1rem; margin: 5px 0; }
 
-@keyframes popupFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(30px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+/* ==================== SULI POPUP ==================== */
+.suli-popup {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    width: 100%;                
+    max-width: 420px;           
+    height: auto;
+    padding: 10px 5px;          
+    box-sizing: border-box;
+    margin: 0 auto;
 }
 
 .suli-lock {
-    font-size: 52px;
-    margin-bottom: 20px;
+    font-size: 48px;
+    margin-bottom: 16px;
     line-height: 1;
 }
 
 .suli-popup h2 {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 700;
     color: #111;
-    margin: 0 0 12px 0;
+    margin: 0 0 10px 0;
 }
 
 .suli-message {
     color: #555;
-    font-size: 15.5px;
+    font-size: 15px;
     line-height: 1.5;
-    margin-bottom: 36px;
+    margin: 0 0 28px 0;
 }
 
 .suli-buttons {
     display: flex;
     gap: 14px;
+    width: 100%;
 }
 
 .suli-cancel,
 .suli-continue {
     flex: 1;
-    padding: 15px 20px;
-    border-radius: 10px;
-    font-size: 15px;
+    padding: 13px 20px;
+    border-radius: 8px;
+    font-size: 14px;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s ease;
     border: none;
+    text-align: center;
 }
 
 .suli-cancel {
-    background: #f8f9fa;
+    background: #f1f3f4;
     color: #333;
 }
 
 .suli-cancel:hover {
-    background: #f0f0f0;
+    background: #e8eaed;
 }
 
 .suli-continue {
@@ -399,37 +384,144 @@ body {
     transform: translateY(-1px);
 }
 
-/* Top navigation fix */
-nav, .top-nav, .header {  /* Adjust selector to match your actual nav */
+/* =================================================== */
+/* NEW FEED THREE-COLUMN SYSTEM & OVERFLOW CARDS      */
+/* =================================================== */
+.page-layout-wrapper {
     display: flex;
-    align-items: center;
+    justify-content: center;
+    max-width: 1350px;
+    margin: 0 auto;
+    padding: 30px 20px;
+    gap: 25px;
+    box-sizing: border-box;
+}
+
+.side-panel {
+    width: 280px;
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #eef0f2;
+    height: fit-content;
+    position: sticky;
+    top: 25px;
+    box-sizing: border-box;
+}
+
+.side-panel h3 {
+    margin-top: 0;
+    font-size: 16px;
+    font-weight: 700;
+    color: #111;
+}
+
+.side-panel p {
+    font-size: 13px;
+    color: #666;
+    line-height: 1.5;
+}
+
+.feed-stream {
+    flex: 1;
+    max-width: 680px;
+    display: flex;
+    flex-direction: column;
     gap: 16px;
-    padding: 12px 24px;
-    background: white;
-    border-bottom: 1px solid #eee;
 }
 
-nav a, .top-nav a {
-    color: #00b050;
-    text-decoration: none;
-    font-weight: 500;
-}
-.top-bar {
+/* REDDIT / TWITTER HYBRID ARTICLE CARDS */
+.article-card {
+    background-color: #ffffff;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
+    border: 1px solid #eef0f2;
     display: flex;
-    align-items: center;
+    flex-direction: column;
+    gap: 12px;
+    box-sizing: border-box;
+}
+
+.article-card-header {
+    display: flex;
     justify-content: space-between;
-    padding: 16px 30px;
-    background: #ffffff;
-    border-bottom: 1px solid #e8e8e8;
+    align-items: flex-start;
+    gap: 15px;
 }
 
-.back-to-login {
-    color: #00b050;
-    font-weight: 500;
-    text-decoration: none;
+.article-card-title {
+    font-size: 21px;
+    font-weight: 700;
+    color: #111;
+    margin: 0;
+}
+
+.article-card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.article-card-tag-chip {
+    background-color: #e2e8f0;
+    color: #475569;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+.article-card-meta {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Reddit/Twitter text containment & line truncation */
+.article-card-content {
     font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Truncates copy automatically at 3 lines */
+    line-clamp: 3;         /* FIX: Add the standard property here */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
 }
 
-.back-to-login:hover {
+.article-card.expanded .article-card-content {
+    display: block;
+    overflow: visible;
+    -webkit-line-clamp: unset;
+    line-clamp: unset;     /* FIX: Add the standard property here */
+}
+
+.article-card-toggle {
+    background: transparent;
+    border: none;
+    color: #00b050;
+    font-size: 13px;
+    font-weight: 700;
+    cursor: pointer;
+    padding: 0;
+    text-align: left;
+    width: fit-content;
+}
+
+.article-card-toggle:hover {
+    color: #009443;
     text-decoration: underline;
+}
+
+.no-articles-card {
+    text-align: center;
+    padding: 40px;
+    color: #777;
+    background: #ffffff;
+    border-radius: 8px;
+    border: 1px dashed #cbd5e1;
+    font-size: 14px;
 }
