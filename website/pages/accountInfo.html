@@ -1,93 +1,106 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="accountInfo.css" />
+  </head>
 
-<head>
-    <title>Accout Info Page</title>
-    <link rel="stylesheet" href="accountInfo.css">
-    <link rel="stylesheet" href="../styles/general.css">
-</head>
-
-<body>
-
+  <body>
     <div class="account-card">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
-            <div class="title">Account Info</div>
-            <div class="nav-menu">
-                <button class="nav-btn active">Profile</button>
-                <button class="nav-btn">Privacy & Security</button>
-                <button class="nav-btn">Personal Preferences</button>
+      
+      <div class="sidebar">
+        <div class="title">Account Info</div>
+        <div class="nav-menu">
+          <button class="nav-btn active" id="tab-profile">Profile</button>
+          <button class="nav-btn" id="tab-privacy">Privacy & Security</button>
+          <button class="nav-btn" id="tab-prefs">Personal Preferences</button>
+        </div>
+      </div>
+
+      <div class="content-feed">
+        
+        <div class="feed-section active" id="sec-profile">
+          <div class="section-header">
+            <h2>Account Information</h2>
+          </div>
+          
+          <div class="profile-pic-container">
+            <div class="avatar-placeholder">
+              <img id="profilePreview" src="" alt="Avatar" style="display:none; width:100%; height:100%; border-radius:50%; object-fit:cover;" />
+              <i id="profileIcon">👤</i>
             </div>
+            <div class="upload-controls">
+              <input type="file" id="photoInput" accept="image/png, image/jpeg" style="display: none;" />
+              <button class="upload-btn" id="uploadBtn">Change Photo</button>
+              <span class="upload-hint">JPG or PNG. Max 2MB</span>
+            </div>
+          </div>
+
+          <div class="info-grid">
+            <div class="info-group">
+              <label>Username</label>
+              <input type="text" id="usernameInput" class="input-field" placeholder="Enter new username" />
+            </div>
+          </div>
+          <button class="save-btn" id="saveProfileBtn">Save Profile</button>
         </div>
 
-        <!-- Main Content Feed Area -->
-        <div class="content-feed">
-            
-            <!-- SECTION 1: Account Information -->
-            <div class="feed-section open">
-                <div class="section-header">
-                    <h2>Account Information</h2>
-                    <div class="header-actions">
-                        <button class="edit-btn">Edit</button>
-                        <i class="fa-solid fa-chevron-up toggle-icon"></i>
-                    </div>
-                </div>
-                
-                <div class="section-content">
-                    <!-- Profile Picture Upload Row -->
-                    <div class="profile-pic-container">
-                        <div class="avatar-placeholder">
-                            <i class="fa-solid fa-user"></i>
-                        </div>
-                        <div class="upload-controls">
-                            <label href="#" class="upload-btn">
-                                <input type="file" accept="image/*" hidden>
-                                Change Photo
-                            </label>
-                            <p class="upload-hint">JPG or PNG. Max 2MB</p>
-                        </div>
-                    </div>
-
-                    <!-- Info Grid -->
-                    <div class="info-grid">
-                        <div class="info-group">
-                            <label>First Name</label>
-                            <div class="value">Rafael</div>
-                        </div>
-                        <div class="info-group">
-                            <label>Last Name</label>
-                            <div class="value">Rodrigues</div>
-                        </div>
-                        <div class="info-group full-width">
-                            <label>Email Address</label>
-                            <div class="value">rafael@gmail.com</div>
-                        </div>
-                    </div>
-                </div>
+        <div class="feed-section" id="sec-privacy">
+          <div class="section-header">
+            <h2>Change Password</h2>
+          </div>
+          
+          <div class="info-group full-width">
+            <label>Old Password</label>
+            <div class="passwordInputWrapper">
+              <input type="password" id="oldPasswordInput" class="input-field" />
+              <button class="eyeButton" id="eyeOld"><img src="../images/view.png" id="iconOld" alt="view"/></button>
             </div>
+          </div>
 
-            <!-- SECTION 2: Username & Password -->
-            <div class="feed-section closed">
-                <div class="section-header">
-                    <h2>Username & Password</h2>
-                    <i class="fa-solid fa-chevron-down toggle-icon"></i>
-                </div>
-                <div class="section-content">
-                    <div class="info-grid">
-                        <div class="info-group">
-                            <label>Username</label>
-                            <div class="value">rafael_rodrigues</div>
-                        </div>
-                        <div class="info-group">
-                            <label>Password</label>
-                            <div class="value">••••••••••••</div>
-                        </div>
-                    </div>
-                </div>
+          <div class="info-group full-width" style="margin-top: 15px;">
+            <label>New Password</label>
+            <div class="passwordInputWrapper">
+              <input type="password" id="newPasswordInput" class="input-field" />
+              <button class="eyeButton" id="eyeNew"><img src="../images/view.png" id="iconNew" alt="view"/></button>
             </div>
+          </div>
 
+          <div class="info-group full-width" style="margin-top: 15px;">
+            <label>Confirm New Password</label>
+            <div class="passwordInputWrapper">
+              <input type="password" id="confirmPasswordInput" class="input-field" />
+              <button class="eyeButton" id="eyeConfirm"><img src="../images/view.png" id="iconConfirm" alt="view"/></button>
+            </div>
+          </div>
+          <button class="save-btn" id="savePasswordBtn">Update Password</button>
         </div>
+
+        <div class="feed-section" id="sec-prefs">
+          <div class="section-header">
+            <h2>Notifications & Display</h2>
+          </div>
+          
+          <div class="info-group full-width">
+            <label>Email Notifications</label>
+            <div style="margin-top: 5px; display: flex; align-items: center; gap: 10px;">
+              <input type="checkbox" id="emailNotif" checked />
+              <span style="font-size: 0.95rem; color: #1f2937;">Receive emails when someone interacts with your articles</span>
+            </div>
+          </div>
+
+          <div class="info-group full-width" style="margin-top: 20px;">
+            <label>Theme Preference</label>
+            <select class="input-field" style="width: 200px;">
+              <option>Light Mode</option>
+              <option>Dark Mode</option>
+            </select>
+          </div>
+          <button class="save-btn" id="savePrefsBtn">Save Preferences</button>
+        </div>
+
+      </div>
     </div>
-
-</body>
+    <script src="account.js"></script>
+  </body>
 </html>

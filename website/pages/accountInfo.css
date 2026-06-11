@@ -28,7 +28,7 @@ body {
 /* Sidebar Navigation */
 .sidebar {
     width: 280px;
-    background-color: #000000; /* Cool Dark Matte Charcoal */
+    background-color: #000000;
     padding: 40px 24px;
     display: flex;
     flex-direction: column;
@@ -68,7 +68,7 @@ body {
 
 .nav-btn.active {
     color: #ffffff;
-    background-color: #374151; /* Dark active accent */
+    background-color: #374151;
 }
 
 /* Main Content Feed Area */
@@ -77,53 +77,33 @@ body {
     padding: 40px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
     background-color: #ffffff;
 }
 
-/* Accordion Section Structures */
+/* Tab Switching Logic: Hide sections unless they have the 'active' class */
 .feed-section {
-    border-bottom: 1px solid #e5e7eb;
-    padding-bottom: 20px;
+    display: none;
+}
+.feed-section.active {
+    display: block;
+    animation: fadeIn 0.3s ease;
 }
 
-.feed-section.closed .section-content {
-    display: none;
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(5px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 .section-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 24px;
-    cursor: pointer;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 .section-header h2 {
     font-size: 1.15rem;
     color: #111827;
     font-weight: 600;
-}
-
-.header-actions {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-}
-
-.edit-btn {
-    background: transparent;
-    border: none;
-    color: #000000;
-    font-weight: 600;
-    font-size: 0.9rem;
-    cursor: pointer;
-    text-decoration: underline;
-}
-
-.toggle-icon {
-    color: #6b7280;
-    font-size: 0.9rem;
 }
 
 /* Profile Picture Layout */
@@ -145,11 +125,13 @@ body {
     justify-content: center;
     align-items: center;
     border: 2px solid #e5e7eb;
+    overflow: hidden; /* Ensures photo stays inside circle */
 }
 
 .avatar-placeholder i {
     font-size: 1.7rem;
     color: #9ca3af;
+    font-style: normal;
 }
 
 .upload-controls {
@@ -162,12 +144,13 @@ body {
     font-size: 0.85rem;
     font-weight: 600;
     color: #ffffff;
-    background-color: #0b0c0c; /* Solid black/dark button style */
+    background-color: #0b0c0c;
     padding: 6px 14px;
     border-radius: 6px;
     cursor: pointer;
     transition: background 0.2s;
     width: max-content;
+    border: none;
 }
 
 .upload-btn:hover {
@@ -179,15 +162,12 @@ body {
     color: #9ca3af;
 }
 
-/* Form Value Data Grid */
+/* Forms & Inputs */
 .info-grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: 1fr;
     gap: 20px;
-}
-
-.info-group.full-width {
-    grid-column: span 2;
+    max-width: 400px;
 }
 
 .info-group label {
@@ -195,13 +175,71 @@ body {
     font-size: 0.75rem;
     font-weight: 700;
     text-transform: uppercase;
-    color: #9ca3af; /* Soft label text */
+    color: #9ca3af;
     letter-spacing: 0.5px;
     margin-bottom: 6px;
 }
 
-.info-group .value {
-    font-size: 1rem;
-    color: #1f2937;
-    font-weight: 500;
+.input-field {
+    width: 100%;
+    padding: 10px 12px;
+    font-size: 0.95rem;
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    outline: none;
+    transition: border 0.2s;
+}
+
+.input-field:focus {
+    border-color: #000000;
+}
+
+/* Password Visibility Wrapper */
+.passwordInputWrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    max-width: 400px;
+}
+
+.passwordInputWrapper input {
+    padding-right: 40px; /* Leave space for the eye icon */
+}
+
+.eyeButton {
+    position: absolute;
+    right: 10px;
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.eyeButton img {
+    width: 20px;
+    height: 20px;
+    opacity: 0.6;
+}
+
+.eyeButton:hover img {
+    opacity: 1;
+}
+
+/* Save Buttons */
+.save-btn {
+    margin-top: 30px;
+    background-color: #2563eb; /* Nice professional blue */
+    color: white;
+    font-weight: 600;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.save-btn:hover {
+    background-color: #1d4ed8;
 }

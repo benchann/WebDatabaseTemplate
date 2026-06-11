@@ -12,6 +12,7 @@ class Database() : DatabaseCore("database")
   public DbSet<User> Users { get; set; } = default!;
   public DbSet<Article> Articles { get; set; } = default!;
 }
+
 class Program
 {
   static void Main()
@@ -39,7 +40,7 @@ class Program
           var user = database.Users.FirstOrDefault(u => u.Token == token);
           request.Respond(user);
         }
-        if (request.Name == "signUp")
+        else if (request.Name == "signUp")
         {
           var (username, password) = request.GetParams<(string, string)>();
 
@@ -63,6 +64,57 @@ class Program
 
           request.Respond(user?.Token);
         }
+        
+        // --- NEW: UPDATE PROFILE (Username & Photo) ---
+        else if (request.Name == "updateProfile")
+        {
+          var (token, newUsername, photoData) = request.GetParams<(string, string, string)>();
+          var user = database.Users.FirstOrDefault(u => u.Token == token);
+
+          if (user == null)
+          {
+            request.Respond(false); // Token invalid
+            continue;
+          }
+
+          // Check if someone else already took the new username
+          if (database.Users.Any(u => u.Username == newUsername && u.Id != user.Id))
+          {
+            request.Respond(false); // Username taken
+            continue;
+          }
+
+          user.Username = newUsername;
+          user.PhotoData = photoData; // Storing the base64 string
+          database.SaveChanges();
+
+          request.Respond(true); // Success
+        }
+
+        // --- NEW: UPDATE PASSWORD ---
+        else if (request.Name == "updatePassword")
+        {
+          var (token, oldPassword, newPassword) = request.GetParams<(string, string, string)>();
+          var user = database.Users.FirstOrDefault(u => u.Token == token);
+
+          if (user == null)
+          {
+            request.Respond(false);
+            continue;
+          }
+
+          if (user.Password != oldPassword)
+          {
+            request.Respond(false); // Old password doesn't match
+            continue;
+          }
+
+          user.Password = newPassword;
+          database.SaveChanges();
+
+          request.Respond(true); // Success
+        }
+
         else if (request.Name == "publishArticle")
         {
           var (title, content, tags, token) = request.GetParams<(string, string, string, string)>();
@@ -82,7 +134,6 @@ class Program
         }
         else if (request.Name == "getArticles")
         {
-          // FIXED: Restored the proper query so it sends the AuthorUsername back to your TypeScript
           var feedData = database.Articles
             .Include(a => a.User)
             .OrderByDescending(a => a.Id)
@@ -92,7 +143,8 @@ class Program
               a.Title,
               a.Content,
               a.Tags,
-              AuthorUsername = a.User.Username
+              AuthorUsername = a.User.Username,
+              AuthorPhoto = a.User.PhotoData // Sent back to front end for UI if needed
             })
             .ToList();
             
@@ -107,13 +159,17 @@ class Program
     }
   }
 }
+
 class User(string username, string password, string token)
 {
   public int Id { get; set; } = default!;
   public string Username { get; set; } = username;
   public string Password { get; set; } = password;
   public string Token { get; set; } = token;
+  // NEW: Added this to store the profile picture (Base64 string)
+  public string PhotoData { get; set; } = ""; 
 }
+
 class Article(string title, string content, string tags, int userId)
 {
   public int Id { get; set; } = default!;
