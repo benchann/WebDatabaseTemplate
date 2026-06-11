@@ -132,7 +132,8 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
             create("h2", { textContent: "Create content", className: "canvas-heading" }),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Title Of The Post" }),
-                create("input", { id: "titleInput", type: "text", placeholder: "Add a title to your post", className: "title-input" })
+                // FIX: Changed input type text to textarea so it wraps down when typing long titles
+                create("textarea", { id: "titleInput", placeholder: "Add a title to your post", className: "title-input" })
             ),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Content" }),
@@ -171,7 +172,7 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
     )
 ) as HTMLDivElement;
 
-// ==================== POPUP INJECTIONS ====================
+// POPUP INJECTIONS 
 var articlePopUpDiv = createPopup(articleContentCreationPopUp) as HTMLDivElement;
 articlePopUpDiv.classList.add("invisible");
 document.body.appendChild(articlePopUpDiv);
@@ -211,7 +212,6 @@ document.body.appendChild(suliPopup);
 
 //#region FEED RENDER LOOPER
 var loadFeedStream = async function(): Promise<void> {
-    // Dynamically query to ensure DOM lifecycle availability
     const feedStream = document.getElementById("feedStream") as HTMLDivElement;
     if (!feedStream) return;
 
@@ -249,29 +249,32 @@ var loadFeedStream = async function(): Promise<void> {
         var content = create("div", { className: "article-card-content" });
         content.innerHTML = displayContent;
 
-        var toggleBtn = create("button", { textContent: "Read More", className: "article-card-toggle" });
-        toggleBtn.onclick = function() {
-            if (card.classList.contains("expanded")) {
-                card.classList.remove("expanded");
-                toggleBtn.textContent = "Read More";
-            } else {
-                card.classList.add("expanded");
-                toggleBtn.textContent = "Show Less";
-            }
-        };
-
         card.appendChild(header);
         card.appendChild(meta);
         card.appendChild(content);
-        card.appendChild(toggleBtn);
+        
         feedStream.appendChild(card);
+
+        if (content.scrollHeight > content.clientHeight) {
+            var toggleBtn = create("button", { textContent: "Read More", className: "article-card-toggle" });
+            toggleBtn.onclick = function() {
+                if (card.classList.contains("expanded")) {
+                    card.classList.remove("expanded");
+                    toggleBtn.textContent = "Read More";
+                } else {
+                    card.classList.add("expanded");
+                    toggleBtn.textContent = "Show Less";
+                }
+            };
+            card.appendChild(toggleBtn);
+        }
     });
 };
 
-// ==================== INTERACTION ACTION HANDLERS ====================
-// FIXED: Added missing async signature and updated dynamic variable selector scoping
+// INTERACTION ACTION HANDLERS 
 publishButton.onclick = async function() {
-    const titleInput = document.getElementById("titleInput") as HTMLInputElement;
+    // FIX: Updated to HTMLTextAreaElement to match the new component type
+    const titleInput = document.getElementById("titleInput") as HTMLTextAreaElement;
     if (!titleInput) return;
 
     var titleVal = titleInput.value.trim();
@@ -285,7 +288,6 @@ publishButton.onclick = async function() {
 
     var tagsString = selectedTags.join(",");
     
-    // FIXED: Swapped parameters grouping from a standard tuple evaluation sequence into an explicit array array mapping bounds [...]
     var success = await send<boolean>("publishArticle", [titleVal, contentVal, tagsString, token]);
     if (success) {
         titleInput.value = "";
@@ -300,5 +302,4 @@ publishButton.onclick = async function() {
     }
 };
 
-// Initial invocation on source resolution execution boundaries
 loadFeedStream();

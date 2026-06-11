@@ -2,18 +2,22 @@ body {
     background-color: #f6f6f6;
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
     margin: 0;
+    position: relative;
 }
 
 /* ================================ */
 /* GLOBAL HIGHLIGHT COLOR           */
 /* ================================ */
 ::selection {
-    background-color: #55efc4; /* Your green */
+    background-color: #55efc4;
     color: #000;
 }
 
 /* #region POST CONTENT SECTION */
 .popupContainerDiv {
+    position: fixed;
+    top: 0;
+    left: 0;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -21,6 +25,7 @@ body {
     height: 100vh;
     box-sizing: border-box;
     background-color: rgba(0, 0, 0, 0.05);
+    z-index: 9999; 
 }
 
 .editor-layout-container {
@@ -87,6 +92,7 @@ body {
     background-color: #ffffff;
     display: flex;
     flex-direction: column;
+    min-width: 0;
 }
 
 .editor-nav {
@@ -128,6 +134,7 @@ body {
     color: #222;
 }
 
+/* FIX: Transformed into a textarea style to allow vertical scrolling and word breaking */
 .title-input {
     width: 100%;
     padding: 12px 0;
@@ -136,6 +143,16 @@ body {
     font-size: 15px;
     outline: none;
     color: #333;
+    font-family: inherit;
+    resize: none;
+    min-height: 44px;
+    max-height: 120px;
+    overflow-y: auto;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;
+    box-sizing: border-box;
+    background-color: transparent;
 }
 
 /* NEW FUNCTIONAL EDITOR STYLES     */
@@ -200,6 +217,7 @@ body {
 /* The actual text input area */
 .rich-text-editor {
     min-height: 300px;
+    max-height: 420px; 
     padding: 15px 20px;
     font-size: 15px;
     line-height: 1.6;
@@ -208,8 +226,11 @@ body {
     outline: none;
     overflow-y: auto;
     word-wrap: break-word;
+    overflow-wrap: break-word; 
+    word-break: break-all;     
     white-space: pre-wrap;
     max-width: 100%;
+    box-sizing: border-box;
 }
 
 .rich-text-editor p {
@@ -388,17 +409,22 @@ body {
 /* NEW FEED THREE-COLUMN SYSTEM & OVERFLOW CARDS      */
 /* =================================================== */
 .page-layout-wrapper {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
-    max-width: 1350px;
-    margin: 0 auto;
-    padding: 30px 20px;
+    width: 70%;
+    min-height: 100vh;
+    padding: 30px 0;
     gap: 25px;
     box-sizing: border-box;
 }
 
 .side-panel {
-    width: 280px;
+    width: 240px;              
     flex-shrink: 0;
     background-color: #ffffff;
     border-radius: 8px;
@@ -426,10 +452,14 @@ body {
 
 .feed-stream {
     flex: 1;
-    max-width: 680px;
     display: flex;
     flex-direction: column;
     gap: 16px;
+    padding: 0 30px;
+    border-left: 1px solid #e2e8f0;
+    border-right: 1px solid #e2e8f0;
+    box-sizing: border-box;
+    min-width: 0; /* FIX: Prevents feed stream from inflating infinitely */
 }
 
 /* REDDIT / TWITTER HYBRID ARTICLE CARDS */
@@ -443,6 +473,8 @@ body {
     flex-direction: column;
     gap: 12px;
     box-sizing: border-box;
+    min-width: 0; /* FIX: Restricts the card box bounds strictly to its parent */
+    overflow: hidden; /* FIX: Extra lock to guarantee no boundary leaks */
 }
 
 .article-card-header {
@@ -450,6 +482,7 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     gap: 15px;
+    min-width: 0; /* FIX: Stops header titles from destroying flex boundaries */
 }
 
 .article-card-title {
@@ -457,12 +490,17 @@ body {
     font-weight: 700;
     color: #111;
     margin: 0;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all; /* FIX: Aggressively cuts massive strings of text in titles */
+    min-width: 0;
 }
 
 .article-card-tags {
     display: flex;
     flex-wrap: wrap;
     gap: 5px;
+    flex-shrink: 0;
 }
 
 .article-card-tag-chip {
@@ -486,17 +524,20 @@ body {
     line-height: 1.6;
     color: #333;
     display: -webkit-box;
-    -webkit-line-clamp: 3; /* Truncates copy automatically at 3 lines */
-    line-clamp: 3;         /* FIX: Add the standard property here */
+    -webkit-line-clamp: 3; 
+    line-clamp: 3;         
     -webkit-box-orient: vertical;
     overflow: hidden;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    word-break: break-all;  /* FIX: Because this breaks words, height increases normally and triggers Read More clamp! */
 }
 
 .article-card.expanded .article-card-content {
     display: block;
     overflow: visible;
     -webkit-line-clamp: unset;
-    line-clamp: unset;     /* FIX: Add the standard property here */
+    line-clamp: unset;    
 }
 
 .article-card-toggle {
