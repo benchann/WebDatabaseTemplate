@@ -7,13 +7,34 @@
 </head>
 <body>
     <div class="page-layout-wrapper">
-        <div class="side-panel">
-            <h3>SciZone Hub</h3>
-            <p>Publish research notes, articles, and scientific findings directly to the stream.</p>
-            <button id="createArticleButton" class="createArticleButton">Create Article</button>
+        
+        <div class="side-panel-left">
+            <div class="left-ui-container">
+                <div class="sidebar-container">
+                    <div class="sidebar-brand">Sci Zone</div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">Main Menu</div>
+                        <div class="nav-item active">Feed</div>
+                        <a href="index.html" class="nav-item">Main Page</a>
+                    </div>
+
+                    <div class="sidebar-section">
+                        <div class="sidebar-title">Pinned Articles</div>
+                        <div id="pinnedArticlesList" class="pinned-list">
+                            </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <div id="feedStream" class="feed-stream"></div>
+
+        <div class="side-panel-right">
+            <button id="createArticleButton" class="createArticleButton">Create Article</button>
+            <button id="openDraftsButton" class="createArticleButton">My Drafts</button>
+        </div>
+        
     </div>
 
     <script type="module" src="feed.js"></script>

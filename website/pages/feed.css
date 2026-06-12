@@ -5,15 +5,11 @@ body {
     position: relative;
 }
 
-/* ================================ */
-/* GLOBAL HIGHLIGHT COLOR           */
-/* ================================ */
 ::selection {
     background-color: #55efc4;
     color: #000;
 }
 
-/* #region POST CONTENT SECTION */
 .popupContainerDiv {
     position: fixed;
     top: 0;
@@ -38,7 +34,6 @@ body {
     box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* LEFT SIDEBAR */
 .editor-sidebar {
     width: 280px;
     background-color: #f6f6f6;
@@ -50,13 +45,7 @@ body {
     border-right: 1px solid #eef0f2;
 }
 
-.sidebar-group { 
-    display: flex; 
-    flex-direction: column; 
-    gap: 8px; 
-    position: relative;
-}
-
+.sidebar-group { display: flex; flex-direction: column; gap: 8px; position: relative; }
 .sidebar-group label { font-size: 14px; font-weight: 600; color: #111; }
 
 .sidebar-input {
@@ -86,7 +75,6 @@ body {
 
 .publish-btn:hover { background-color: #009443; }
 
-/* RIGHT MAIN CANVAS */
 .editor-main {
     flex: 1;
     background-color: #ffffff;
@@ -116,25 +104,10 @@ body {
     gap: 25px;
 }
 
-.canvas-heading {
-    font-size: 26px;
-    font-weight: 700;
-    margin: 0 0 10px 0;
-}
+.canvas-heading { font-size: 26px; font-weight: 700; margin: 0 0 10px 0; }
+.input-group { display: flex; flex-direction: column; gap: 8px; }
+.input-group label { font-size: 13px; font-weight: 700; color: #222; }
 
-.input-group {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-}
-
-.input-group label {
-    font-size: 13px;
-    font-weight: 700;
-    color: #222;
-}
-
-/* FIX: Transformed into a textarea style to allow vertical scrolling and word breaking */
 .title-input {
     width: 100%;
     padding: 12px 0;
@@ -155,7 +128,6 @@ body {
     background-color: transparent;
 }
 
-/* NEW FUNCTIONAL EDITOR STYLES     */
 .text-editor-box {
     border: 1px solid #e8e8e8;
     border-radius: 6px;
@@ -165,7 +137,6 @@ body {
     overflow: hidden;
 }
 
-/* Static Toolbar Style */
 .editor-toolbar {
     display: flex;
     gap: 6px;
@@ -187,34 +158,13 @@ body {
     transition: all 0.2s;
 }
 
-.toolbar-btn:hover {
-    background-color: #e2e6ea;
-    border: 1px solid #cbd5e1;
-}
-
+.toolbar-btn:hover { background-color: #e2e6ea; border: 1px solid #cbd5e1; }
 .toolbar-btn.bold { font-weight: 800; }
 .toolbar-btn.italic { font-style: italic; }
 .toolbar-btn.underline { text-decoration: underline; }
 
-.toolbar-btn.highlight-btn {
-    background-color: #55efc4;
-    color: #000;
-    border: 1px solid #00b894;
-}
+.toolbar-divider { width: 1px; height: 20px; background-color: #d1d5db; margin: 0 4px; }
 
-.toolbar-btn.highlight-btn:hover {
-    background-color: #00b894;
-    color: white;
-}
-
-.toolbar-divider {
-    width: 1px;
-    height: 20px;
-    background-color: #d1d5db;
-    margin: 0 4px;
-}
-
-/* The actual text input area */
 .rich-text-editor {
     min-height: 300px;
     max-height: 420px; 
@@ -227,30 +177,17 @@ body {
     overflow-y: auto;
     word-wrap: break-word;
     overflow-wrap: break-word; 
-    word-break: break-all;     
+    word-break: break-all;    
     white-space: pre-wrap;
     max-width: 100%;
     box-sizing: border-box;
 }
 
-.rich-text-editor p {
-    margin-top: 0;
-}
+.rich-text-editor p { margin-top: 0; }
+.invisible { display: none !important; }
 
-/* Hidden Utility State */
-.invisible {
-    display: none !important;
-}
-/* #endregion */
+.tag-remove-btn { cursor: pointer; user-select: none; color: #ff7675; margin-left: 4px; }
 
-.tag-remove-btn {
-    cursor: pointer; 
-    user-select: none; 
-    color: #ff7675;
-    margin-left: 4px;
-}
-
-/* The tag chips themselves */
 .tag-chip {
     display: inline-flex;
     align-items: center;
@@ -264,14 +201,8 @@ body {
     user-select: none;
 }
 
-.selected-tags-container {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-bottom: 4px;
-}
+.selected-tags-container { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 4px; }
 
-/* Dropdown menu rules */
 .tags-dropdown {
     position: absolute;
     top: 100%;
@@ -287,19 +218,9 @@ body {
     box-sizing: border-box;
 }
 
-.dropdown-item {
-    padding: 10px 12px;
-    font-size: 13px;
-    color: #333;
-    cursor: pointer;
-    user-select: none;
-}
+.dropdown-item { padding: 10px 12px; font-size: 13px; color: #333; cursor: pointer; user-select: none; }
+.dropdown-item:hover { background-color: #f1f5f9; }
 
-.dropdown-item:hover {
-    background-color: #f1f5f9;
-}
-
-/* The main "Select Tags" button */
 .add-tag-btn {
     width: 100%;
     padding: 10px;
@@ -314,167 +235,173 @@ body {
     transition: background 0.15s;
 }
 
-.add-tag-btn:hover {
-    background-color: #f8fafc;
-    border-color: #94a3b8;
-}
+.add-tag-btn:hover { background-color: #f8fafc; border-color: #94a3b8; }
 
-.rich-text-editor h1,
-.rich-text-editor h2,
-.rich-text-editor h3 {
-    font-weight: normal;
-}
+.rich-text-editor h3 { font-size: 2rem; margin: 10px 0; font-weight: normal; }
+.rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; font-weight: normal; }
+.rich-text-editor h1 { font-size: 1rem; margin: 5px 0; font-weight: normal; }
 
-.rich-text-editor h3 { font-size: 2rem; margin: 10px 0; }
-.rich-text-editor h2 { font-size: 1.5rem; margin: 8px 0; }
-.rich-text-editor h1 { font-size: 1rem; margin: 5px 0; }
-
-/* ==================== SULI POPUP ==================== */
 .suli-popup {
     display: flex;
     flex-direction: column;
     align-items: center;
     text-align: center;
-    width: 100%;                
-    max-width: 420px;           
+    width: 100%;           
+    max-width: 420px;          
     height: auto;
     padding: 10px 5px;          
     box-sizing: border-box;
     margin: 0 auto;
 }
 
-.suli-lock {
-    font-size: 48px;
-    margin-bottom: 16px;
-    line-height: 1;
+.suli-lock { font-size: 48px; margin-bottom: 16px; line-height: 1; }
+.suli-popup h2 { font-size: 24px; font-weight: 700; color: #111; margin: 0 0 10px 0; }
+.suli-message { color: #555; font-size: 15px; line-height: 1.5; margin: 0 0 28px 0; }
+.suli-buttons { display: flex; gap: 14px; width: 100%; }
+
+.suli-cancel, .suli-continue {
+    flex: 1; padding: 13px 20px; border-radius: 8px; font-size: 14px;
+    font-weight: 600; cursor: pointer; transition: all 0.2s ease;
+    border: none; text-align: center;
 }
 
-.suli-popup h2 {
-    font-size: 24px;
-    font-weight: 700;
-    color: #111;
-    margin: 0 0 10px 0;
-}
+.suli-cancel { background: #f1f3f4; color: #333; }
+.suli-cancel:hover { background: #e8eaed; }
+.suli-continue { background: #00b050; color: white; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+.suli-continue:hover { background: #009443; transform: translateY(-1px); }
 
-.suli-message {
-    color: #555;
-    font-size: 15px;
-    line-height: 1.5;
-    margin: 0 0 28px 0;
-}
-
-.suli-buttons {
-    display: flex;
-    gap: 14px;
-    width: 100%;
-}
-
-.suli-cancel,
-.suli-continue {
-    flex: 1;
-    padding: 13px 20px;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    border: none;
-    text-align: center;
-}
-
-.suli-cancel {
-    background: #f1f3f4;
-    color: #333;
-}
-
-.suli-cancel:hover {
-    background: #e8eaed;
-}
-
-.suli-continue {
-    background: #00b050;
-    color: white;
-    text-decoration: none;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.suli-continue:hover {
-    background: #009443;
-    transform: translateY(-1px);
-}
-
-/* =================================================== */
-/* NEW FEED THREE-COLUMN SYSTEM & OVERFLOW CARDS      */
-/* =================================================== */
 .page-layout-wrapper {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    margin: 0 auto;
-    display: flex;
-    justify-content: center;
-    width: 70%;
-    min-height: 100vh;
-    padding: 30px 0;
-    gap: 25px;
-    box-sizing: border-box;
+    top: 0; left: 0; right: 0; margin: 0 auto;
+    display: flex; justify-content: center;
+    width: 70%; 
+    min-height: 100vh; padding: 30px 0; gap: 25px; box-sizing: border-box;
 }
 
-.side-panel {
-    width: 240px;              
+.side-panel-left {
+    width: 240px;          
     flex-shrink: 0;
-    background-color: #ffffff;
-    border-radius: 8px;
-    padding: 20px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.03);
-    border: 1px solid #eef0f2;
-    height: fit-content;
-    position: sticky;
-    top: 25px;
-    box-sizing: border-box;
+    height: fit-content; position: sticky; top: 25px; box-sizing: border-box;
 }
 
-.side-panel h3 {
-    margin-top: 0;
-    font-size: 16px;
+.left-ui-container {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.ui-header {
+    background: #f8fafc;
+    padding: 16px;
+    font-size: 12px;
     font-weight: 700;
-    color: #111;
+    color: #64748b;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
 }
 
-.side-panel p {
-    font-size: 13px;
-    color: #666;
-    line-height: 1.5;
-}
-
-.feed-stream {
-    flex: 1;
+.pinned-list {
     display: flex;
     flex-direction: column;
-    gap: 16px;
-    padding: 0 30px;
-    border-left: 1px solid #e2e8f0;
-    border-right: 1px solid #e2e8f0;
-    box-sizing: border-box;
-    min-width: 0; /* FIX: Prevents feed stream from inflating infinitely */
 }
 
-/* REDDIT / TWITTER HYBRID ARTICLE CARDS */
+.pinned-item {
+    padding: 16px;
+    border-bottom: 1px solid #f1f5f9;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pinned-item:hover { 
+    background-color: #f8fafc; 
+    padding-left: 20px;
+}
+
+.pinned-item-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #1e293b;
+    line-height: 1.4;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.pinned-item-author { font-size: 11px; color: #94a3b8; font-weight: 500; }
+
+.side-panel-right {
+    width: 240px;
+    flex-shrink: 0;
+    height: fit-content; position: sticky; top: 25px; box-sizing: border-box;
+}
+
+.createArticleButton { display: block; width: 100%; padding: 12px; border-radius: 8px; border: none; background: #00b050; color: white; font-weight: 600; cursor: pointer; }
+
+.feed-stream {
+    flex: 1; display: flex; flex-direction: column; gap: 16px;
+    box-sizing: border-box; min-width: 0;
+}
+
 .article-card {
     background-color: #ffffff;
     border-radius: 8px;
-    padding: 24px;
     box-shadow: 0 4px 15px rgba(0,0,0,0.03);
     border: 1px solid #eef0f2;
     display: flex;
+    flex-direction: row;
+    box-sizing: border-box;
+    min-width: 0;
+    overflow: hidden;
+    transition: box-shadow 0.3s ease;
+}
+
+.vote-column {
+    background-color: #fcfcfc;
+    width: 44px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 12px 0;
+    border-right: 1px solid #f0f0f0;
+    gap: 4px;
+}
+
+.vote-btn {
+    background: transparent;
+    border: none;
+    color: #999;
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 4px;
+    transition: all 0.15s ease;
+}
+
+.vote-btn svg { width: 20px; height: 20px; }
+.vote-btn:hover { background: #eef0f2; }
+.vote-btn.upvote:hover, .vote-btn.upvote.active { color: #ff4500; }
+.vote-btn.downvote:hover, .vote-btn.downvote.active { color: #7193ff; }
+
+.vote-score { font-size: 13px; font-weight: 700; color: #111; }
+.vote-score.upvoted-text { color: #ff4500; }
+.vote-score.downvoted-text { color: #7193ff; }
+
+.article-card-main {
+    flex: 1;
+    padding: 20px 24px;
+    display: flex;
     flex-direction: column;
     gap: 12px;
-    box-sizing: border-box;
-    min-width: 0; /* FIX: Restricts the card box bounds strictly to its parent */
-    overflow: hidden; /* FIX: Extra lock to guarantee no boundary leaks */
+    min-width: 0;
 }
 
 .article-card-header {
@@ -482,87 +409,201 @@ body {
     justify-content: space-between;
     align-items: flex-start;
     gap: 15px;
-    min-width: 0; /* FIX: Stops header titles from destroying flex boundaries */
-}
-
-.article-card-title {
-    font-size: 21px;
-    font-weight: 700;
-    color: #111;
-    margin: 0;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-all; /* FIX: Aggressively cuts massive strings of text in titles */
     min-width: 0;
 }
 
-.article-card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 5px;
-    flex-shrink: 0;
+.article-title-group { display: flex; flex-direction: column; gap: 8px; flex: 1; min-width: 0; }
+
+.article-card-title {
+    font-size: 20px; font-weight: 700; color: #111; margin: 0;
+    word-wrap: break-word; overflow-wrap: break-word; word-break: break-all;
 }
+
+.article-card-tags { display: flex; flex-wrap: wrap; gap: 5px; }
 
 .article-card-tag-chip {
-    background-color: #e2e8f0;
-    color: #475569;
-    padding: 4px 10px;
-    border-radius: 12px;
-    font-size: 11px;
-    font-weight: 600;
-    white-space: nowrap;
+    background-color: #e2e8f0; color: #475569; padding: 4px 10px;
+    border-radius: 12px; font-size: 11px; font-weight: 600; white-space: nowrap;
 }
 
-.article-card-meta {
-    font-size: 12px;
-    color: #888;
-}
-
-/* Reddit/Twitter text containment & line truncation */
-.article-card-content {
-    font-size: 15px;
-    line-height: 1.6;
-    color: #333;
-    display: -webkit-box;
-    -webkit-line-clamp: 3; 
-    line-clamp: 3;         
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    word-wrap: break-word;
-    overflow-wrap: break-word;
-    word-break: break-all;  /* FIX: Because this breaks words, height increases normally and triggers Read More clamp! */
-}
-
-.article-card.expanded .article-card-content {
-    display: block;
-    overflow: visible;
-    -webkit-line-clamp: unset;
-    line-clamp: unset;    
-}
-
-.article-card-toggle {
+.article-pin-btn {
     background: transparent;
     border: none;
-    color: #00b050;
-    font-size: 13px;
-    font-weight: 700;
+    color: #a0aab5;
     cursor: pointer;
-    padding: 0;
-    text-align: left;
-    width: fit-content;
+    padding: 6px;
+    border-radius: 6px;
+    transition: all 0.2s;
+    display: flex; align-items: center; justify-content: center;
 }
 
-.article-card-toggle:hover {
-    color: #009443;
-    text-decoration: underline;
+.article-pin-btn svg { width: 20px; height: 20px; }
+.article-pin-btn:hover { background: #f1f5f9; color: #00b050; }
+.article-pin-btn.active { color: #00b050; fill: rgba(0, 176, 80, 0.1); }
+
+.article-card-meta { font-size: 12px; color: #888; }
+
+.article-card-content {
+    font-size: 15px; line-height: 1.6; color: #333; display: -webkit-box;
+    -webkit-line-clamp: 3; line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; word-wrap: break-word; overflow-wrap: break-word; word-break: break-all;
 }
+
+.article-card.expanded .article-card-content { display: block; overflow: visible; -webkit-line-clamp: unset; line-clamp: unset; }
+
+.article-card-toggle {
+    background: transparent; border: none; color: #00b050; font-size: 13px; font-weight: 700;
+    cursor: pointer; padding: 0; text-align: left; width: fit-content;
+}
+.article-card-toggle:hover { color: #009443; text-decoration: underline; }
 
 .no-articles-card {
-    text-align: center;
-    padding: 40px;
-    color: #777;
-    background: #ffffff;
-    border-radius: 8px;
-    border: 1px dashed #cbd5e1;
-    font-size: 14px;
+    text-align: center; padding: 40px; color: #777; background: #ffffff;
+    border-radius: 8px; border: 1px dashed #cbd5e1; font-size: 14px;
 }
+/* ... Keep all your existing CSS and add these at the bottom ... */
+
+.sidebar-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding-bottom: 20px;
+}
+
+.sidebar-brand {
+    font-weight: 800;
+    font-size: 20px;
+    padding: 20px 20px 10px 20px;
+    letter-spacing: -0.5px;
+}
+
+.sidebar-section {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.sidebar-title {
+    font-size: 12px;
+    font-weight: 700;
+    color: #64748b;
+    padding: 10px 20px;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+.sidebar-section:hover .nav-item.active:not(:hover){
+    background-color: transparent;
+    color: #333;
+    font-weight: 500;
+}
+.nav-item {
+    padding: 10px 20px;
+    margin: 0 10px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    color: #333;
+    font-weight: 500;
+    transition: background 0.2s;
+    text-decoration: none;
+}
+
+.nav-item:hover {
+    background-color: #f0fdf4;
+    color: #00b050;
+    font-weight: 600;
+    
+}
+
+.nav-item.active {
+    background-color: #f0fdf4;
+    color: #00b050;
+    font-weight: 600;
+}
+
+/* Updated pinned list style to fit the new sidebar */
+#pinnedArticlesList {
+    padding: 0 10px;
+}
+/* --- RIGHT PANEL LAYOUT --- */
+.side-panel-right {
+    width: 280px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border-left: 1px solid #e0e0e0;
+    height: 100vh;
+}
+
+/* --- BUTTON STYLING --- */
+/* This covers both "Create Article" and "Drafts" buttons */
+.createArticleButton {
+    width: 100%;
+    padding: 12px;
+    border-radius: 8px;
+    border: none;
+    background-color: #00b050; /* Green theme */
+    color: white;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s, transform 0.1s;
+    text-align: center;
+}
+
+.createArticleButton:hover {
+    background-color: #008f40;
+}
+
+.createArticleButton:active {
+    transform: translateY(1px);
+}
+
+/* --- DRAFTS LIST STYLING --- */
+.drafts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.draft-item {
+    background: #ffffff;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #eaeaea;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+}
+
+.draft-item h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+/* Small buttons inside the draft items */
+.draft-item button {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    background: #f0f0f0;
+    cursor: pointer;
+}
+
+.draft-item button:hover {
+    background: #e0e0e0;
+}
+
+/* Helper to ensure the popup looks good */
+.editor-main {
+    padding: 20px;
+    overflow-y: auto;
+}
+    

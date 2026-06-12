@@ -2,11 +2,15 @@ import { send } from "clientUtilities";
 import { createPopup } from "components/popup";
 import { create, get } from "componentUtilities";
 
+//#region GLOBAL STATE
+var currentDraftId: number | null = null; 
+//#endregion
+
 //#region DYNAMIC TAG SELECTOR
 var availableTags: string[] = [
-    "Architecture", "Technology", "Agriculture", 
-    "Science", "Medicine", "Biology", 
-    "Physics", "Chemistry", "Genetics"
+    "Academic","Agriculture","Architecture", 
+    "Biology","Chemistry","Genetics","Medicine",   
+    "Physics","Science","Sports","Technology",
 ];
 var selectedTags: string[] = [];
 var selectedTagsContainer = create("div", { className: "selected-tags-container" });
@@ -67,6 +71,15 @@ var tagsGroup = create("div", { className: "sidebar-group" },
 );
 
 var publishButton = create("button", { textContent: "Publish", className: "publish-btn" });
+
+// NEW: Draft Buttons
+var saveDraftBtn = create("button", { textContent: "Save Draft", className: "publish-btn" });
+saveDraftBtn.style.marginTop = "10px";
+saveDraftBtn.style.backgroundColor = "#666";
+
+var myDraftsBtn = create("button", { textContent: "My Drafts", className: "publish-btn" });
+myDraftsBtn.style.marginTop = "10px";
+myDraftsBtn.style.backgroundColor = "#444";
 //#endregion
 
 //#region RICH TEXT EDITOR PLACEHOLDER FIX
@@ -111,6 +124,8 @@ var formatText = (command: string, value: string | null = null): void => {
 var articleContentCreationPopUp = create("div", { className: "editor-layout-container" },
     create("div", { className: "editor-sidebar" },
         tagsGroup,
+        saveDraftBtn,
+        myDraftsBtn,
         publishButton
     ),
     create("div", { className: "editor-main" },
@@ -132,13 +147,11 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
             create("h2", { textContent: "Create content", className: "canvas-heading" }),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Title Of The Post" }),
-                // FIX: Changed input type text to textarea so it wraps down when typing long titles
                 create("textarea", { id: "titleInput", placeholder: "Add a title to your post", className: "title-input" })
             ),
             create("div", { className: "input-group" },
                 create("label", { textContent: "Content" }),
                 create("div", { className: "text-editor-box" },
-                    // TOOLBAR
                     create("div", { className: "editor-toolbar" },
                         create("button", { textContent: "H1", title:"Normal Size", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H1") }),
                         create("button", { textContent: "H2", title:"Subtitle Size", className: "toolbar-btn", onmousedown: (e: MouseEvent) => e.preventDefault(), onclick: () => formatText("formatBlock", "H2") }),
@@ -172,27 +185,32 @@ var articleContentCreationPopUp = create("div", { className: "editor-layout-cont
     )
 ) as HTMLDivElement;
 
-// POPUP INJECTIONS 
 var articlePopUpDiv = createPopup(articleContentCreationPopUp) as HTMLDivElement;
 articlePopUpDiv.classList.add("invisible");
 document.body.appendChild(articlePopUpDiv);
+//#endregion
 
-var createArticleButton = get("button", "createArticleButton") as HTMLButtonElement;
-createArticleButton.onclick = async function () {
-    var token = localStorage.getItem("token");
-    var user = await send<any>("getUser", token);
-    
-    if (user == null) {
-        suliPopup.classList.remove("invisible");
-    } else {
-        articlePopUpDiv.classList.remove("invisible");
-    }
-};
+//#region DRAFTS POPUP
+const draftsListContainer = create("div", { className: "drafts-list" });
+const draftsPopupContent = create("div", { className: "editor-layout-container" },
+    create("div", { className: "editor-sidebar" },
+        create("h2", { textContent: "My Drafts" }),
+        create("button", { textContent: "Close", className: "suli-cancel", onclick: () => draftsPopup.classList.add("invisible") })
+    ),
+    create("div", { className: "editor-main" }, draftsListContainer)
+);
+draftsPopupContent.style.padding = "20px"; // Apply style outside create
 
+const draftsPopup = createPopup(draftsPopupContent) as HTMLDivElement;
+draftsPopup.classList.add("invisible");
+document.body.appendChild(draftsPopup);
+//#endregion
+
+//#region SULI POPUP FOR AUTHENTICATION
 const suliPopupContent = create("div", { className: "suli-popup" },
     create("div", { className: "suli-lock" }, "🔒"),
     create("h2", { textContent: "Sign in required" }),
-    create("p", { textContent: "You must be logged in to create an article.", className: "suli-message"}),
+    create("p", { textContent: "You must be logged in to perform this action.", className: "suli-message"}),
     create("div", { className: "suli-buttons" },
         create("button", { 
             textContent: "Cancel",
@@ -210,30 +228,185 @@ const suliPopup = createPopup(suliPopupContent) as HTMLDivElement;
 suliPopup.classList.add("invisible");
 document.body.appendChild(suliPopup);
 
+var createArticleButton = get("button", "createArticleButton") as HTMLButtonElement;
+createArticleButton.onclick = async function () {
+    var token = localStorage.getItem("token");
+    var user = await send<any>("getUser", token);
+    
+    if (user == null) {
+        suliPopup.classList.remove("invisible");
+    } else {
+        currentDraftId = null; 
+        (document.getElementById("titleInput") as HTMLTextAreaElement).value = "";
+        richTextEditor.innerHTML = "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>";
+        selectedTags = [];
+        updateTagsDisplay();
+        articlePopUpDiv.classList.remove("invisible");
+    }
+};
+
+myDraftsBtn.onclick = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) { suliPopup.classList.remove("invisible"); return; }
+    
+    draftsListContainer.innerHTML = "";
+    var drafts = await send<any[]>("getDrafts", token);
+
+    if (drafts.length === 0) {
+        draftsListContainer.appendChild(create("p", { textContent: "No drafts found." }));
+    }
+
+    drafts.forEach(draft => {
+        const item = create("div", { className: "draft-item" });
+        item.style.cssText = "border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;";
+        item.appendChild(create("h3", { textContent: draft.Title }));
+
+        const editBtn = create("button", { textContent: "Edit", onclick: () => {
+            currentDraftId = draft.Id;
+            (document.getElementById("titleInput") as HTMLTextAreaElement).value = draft.Title;
+            richTextEditor.innerHTML = draft.Content;
+            selectedTags = draft.Tags ? draft.Tags.split(",") : [];
+            updateTagsDisplay();
+            draftsPopup.classList.add("invisible");
+            articlePopUpDiv.classList.remove("invisible");
+        }});
+        item.appendChild(editBtn);
+
+        const deleteBtn = create("button", { textContent: "Delete", onclick: async () => {
+            // Sends the data as an object matching the C# class
+            await send("deleteDraft", { draftId: draft.Id, token: token });
+            alert("Deleted");
+            // Refresh list
+            myDraftsBtn.click(); 
+        }});
+        item.appendChild(deleteBtn);
+        
+        draftsListContainer.appendChild(item);
+    });
+
+    draftsPopup.classList.remove("invisible");
+};
+// Close the myDraftsBtn.onclick function
+saveDraftBtn.onclick = async () => {
+    const titleInput = document.getElementById("titleInput") as HTMLTextAreaElement;
+    const titleVal = titleInput.value.trim();
+    const contentVal = richTextEditor.innerHTML.trim();
+    const token = localStorage.getItem("token");
+    if (!titleVal) { alert("Title is required."); return; }
+    var success = await send<boolean>("saveDraft", [currentDraftId, titleVal, contentVal, selectedTags.join(","), token]);
+    if (success) { alert("Draft saved!"); articlePopUpDiv.classList.add("invisible"); }
+};
+//#endregion
+
 //#region FEED RENDER LOOPER
 var loadFeedStream = async function(): Promise<void> {
     const feedStream = document.getElementById("feedStream") as HTMLDivElement;
-    if (!feedStream) return;
+    const pinnedList = document.getElementById("pinnedArticlesList") as HTMLDivElement;
+    if (!feedStream || !pinnedList) return;
 
     feedStream.innerHTML = "";
-    var articles = await send<any[]>("getArticles");
+    pinnedList.innerHTML = "";
+    
+    var token = localStorage.getItem("token");
+    var articles = await send<any[]>("getArticles", token || ""); 
+    
+    console.log(articles);
 
     if (!articles || articles.length === 0) {
         feedStream.appendChild(create("div", { textContent: "No articles shared yet. Be the first to publish!", className: "no-articles-card" }));
+        pinnedList.appendChild(create("div", { textContent: "No pins yet.", className: "empty-pins"}));
         return;
     }
 
+    let handleVote = async (articleId: number, requestedVote: number) => {
+        const token = localStorage.getItem("token");
+        if (!token) {
+            suliPopup.classList.remove("invisible");
+            return;
+        }
+
+        const success = await send<boolean>("toggleVote", [token, articleId, requestedVote]);
+        
+        if (success) {
+            await loadFeedStream(); 
+        } else {
+            console.error("Voting failed: Server returned false");
+        }
+    };
+
+    let hasPins = false;
+
     articles.forEach(function(article) {
-        var displayTitle = article.Title || article.title || "";
-        var displayTags = article.Tags || article.tags || "";
-        var displayContent = article.Content || article.content || "";
-        var displayAuthor = article.AuthorUsername || article.authorUsername || "anonymous";
+        const articleId = article.Id || article.id;
+        const displayTitle = article.Title || article.title || "";
+        const displayTags = article.Tags || article.tags || "";
+        const displayContent = article.Content || article.content || "";
+        const displayAuthor = article.AuthorUsername || article.authorUsername || "anonymous";
+        const isPinned = !!(article.IsPinned || article.isPinned);
+        const userVote = article.UserVote ?? article.userVote ?? 0;
+        const score = article.Score ?? article.score ?? 0;
 
-        var card = create("div", { className: "article-card" });
+        if (isPinned) {
+            hasPins = true;
+            var pinnedItem = create("div", { className: "pinned-item" },
+                create("div", { className: "pinned-item-title", textContent: displayTitle }),
+                create("div", { className: "pinned-item-author", textContent: "by u/" + displayAuthor })
+            );
+            
+            pinnedItem.onclick = function() {
+                var targetCard = document.getElementById("article-" + articleId);
+                if (targetCard) {
+                    targetCard.scrollIntoView({ behavior: "smooth", block: "center" });
+                    targetCard.classList.add("expanded");
+                    var toggleBtn = targetCard.querySelector(".article-card-toggle");
+                    if (toggleBtn) toggleBtn.textContent = "Show Less";
+                }
+            };
+            pinnedList.appendChild(pinnedItem);
+        }
+
+        var card = create("div", { className: "article-card", id: "article-" + articleId });
+        var voteColumn = create("div", { className: "vote-column" });
+
+        var upvoteBtn = create("button", {
+            className: "vote-btn upvote " + (userVote === 1 ? "active" : ""),
+            innerHTML: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M4 14h4v7a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1v-7h4a1.001 1.001 0 0 0 .781-1.625l-8-10c-.381-.475-1.181-.475-1.562 0l-8 10A1.001 1.001 0 0 0 4 14z"/></svg>`
+        });
+
+        var scoreDisplay = create("span", {
+            textContent: score.toString(),
+            className: "vote-score " + (
+                userVote === 1
+                    ? "upvoted-text"
+                    : (userVote === -1 ? "downvoted-text" : "")
+            )
+        });
+
+        var downvoteBtn = create("button", {
+            className: "vote-btn downvote " + (userVote === -1 ? "active" : ""),
+            innerHTML: `<svg viewBox="0 0 24 24" fill="currentColor"><path d="M20 10h-4V3a1 1 0 0 0-1-1H9a1 1 0 0 0-1 1v7H4a1.001 1.001 0 0 0-.781 1.625l8 10a1 1 0 0 0 1.562 0l8-10A1.001 1.001 0 0 0 20 10z"/></svg>`
+        });
+
+        upvoteBtn.onclick = () => {
+            console.log("UPVOTE CLICKED");
+            handleVote(articleId, userVote === 1 ? 0 : 1);
+        };
+
+        downvoteBtn.onclick = () => {
+            console.log("DOWNVOTE CLICKED");
+            handleVote(articleId, userVote === -1 ? 0 : -1);
+        };
+
+        voteColumn.appendChild(upvoteBtn);
+        voteColumn.appendChild(scoreDisplay);
+        voteColumn.appendChild(downvoteBtn);
+
+        var cardContentWrapper = create("div", { className: "article-card-main" });
         var header = create("div", { className: "article-card-header" });
+        var titleGroup = create("div", { className: "article-title-group" });
         var title = create("h2", { textContent: displayTitle, className: "article-card-title" });
+        
         var tagsContainer = create("div", { className: "article-card-tags" });
-
         if (displayTags) {
             displayTags.split(",").forEach(function(tag: string) {
                 if (tag.trim() !== "") {
@@ -241,17 +414,35 @@ var loadFeedStream = async function(): Promise<void> {
                 }
             });
         }
+        titleGroup.appendChild(title);
+        titleGroup.appendChild(tagsContainer);
 
-        header.appendChild(title);
-        header.appendChild(tagsContainer);
+        var pinBtn = create("button", { 
+            className: "article-pin-btn " + (isPinned ? "active" : ""),
+            innerHTML: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 17v5"/><path d="M9 10.5V9a3 3 0 0 1 6 0v1.5a4 4 0 0 0 4 4v1H5v-1a4 4 0 0 0 4-4z"/></svg>`
+        });
+
+        pinBtn.onclick = async () => {
+            if (!token) return suliPopup.classList.remove("invisible");
+            if (!articleId) return;
+
+            var success = await send<boolean>("togglePin", [token, articleId]);
+            if (success) loadFeedStream();
+        }; 
+
+        header.appendChild(titleGroup);
+        header.appendChild(pinBtn);
 
         var meta = create("div", { textContent: "Published by u/" + displayAuthor, className: "article-card-meta" });
         var content = create("div", { className: "article-card-content" });
         content.innerHTML = displayContent;
 
-        card.appendChild(header);
-        card.appendChild(meta);
-        card.appendChild(content);
+        cardContentWrapper.appendChild(header);
+        cardContentWrapper.appendChild(meta);
+        cardContentWrapper.appendChild(content);
+        
+        card.appendChild(voteColumn);
+        card.appendChild(cardContentWrapper);
         
         feedStream.appendChild(card);
 
@@ -266,14 +457,16 @@ var loadFeedStream = async function(): Promise<void> {
                     toggleBtn.textContent = "Show Less";
                 }
             };
-            card.appendChild(toggleBtn);
+            cardContentWrapper.appendChild(toggleBtn);
         }
     });
+
+    if (!hasPins) {
+        pinnedList.appendChild(create("div", { textContent: "No pins yet. Click the pin icon on an article!", className: "empty-pins"}));
+    }
 };
 
-// INTERACTION ACTION HANDLERS 
 publishButton.onclick = async function() {
-    // FIX: Updated to HTMLTextAreaElement to match the new component type
     const titleInput = document.getElementById("titleInput") as HTMLTextAreaElement;
     if (!titleInput) return;
 
@@ -290,6 +483,9 @@ publishButton.onclick = async function() {
     
     var success = await send<boolean>("publishArticle", [titleVal, contentVal, tagsString, token]);
     if (success) {
+        // If it was a draft, delete the draft after publish
+        if (currentDraftId) await send("deleteDraft", [currentDraftId, token]);
+
         titleInput.value = "";
         richTextEditor.innerHTML = "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>";
         selectedTags = [];
@@ -301,5 +497,4 @@ publishButton.onclick = async function() {
         alert("Failed to publish your article. Verify your session.");
     }
 };
-
 loadFeedStream();
