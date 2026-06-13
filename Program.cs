@@ -24,6 +24,9 @@ class Program
         var server = new Server(port);
 
         Console.WriteLine("The server is running");
+        Console.WriteLine($"Local:   http://localhost:{port}/website/pages/index.html");
+        Console.WriteLine($"Network: http://{Network.GetLocalNetworkIPAddress()}:{port}/website/pages/index.html");
+
 
         while (true)
         {
@@ -213,20 +216,43 @@ class Program
                 }
                 else if (request.Name == "deleteDraft")
                 {
-                    // Receive the data as a class, not a tuple
-                    var data = request.GetParams<DeleteDraftRequest>(); 
-                    var user = database.Users.FirstOrDefault(u => u.Token == data.Token);
+                    var data = request.GetParams<DeleteDraftRequest>();
+
+                    Console.WriteLine($"Token: {data.Token}");
+                    Console.WriteLine($"DraftId: {data.DraftId}");
+
+                    var user = database.Users.FirstOrDefault(
+                        u => u.Token == data.Token
+                    );
+
+                    Console.WriteLine(
+                        user == null
+                            ? "USER NOT FOUND"
+                            : $"USER FOUND: {user.Id}"
+                    );
 
                     if (user != null)
                     {
-                        // Using data.DraftId instead of draftId.Value
-                        var draft = database.Drafts.FirstOrDefault(d => d.Id == data.DraftId && d.UserId == user.Id);
-                        if (draft != null) 
-                        { 
-                            database.Drafts.Remove(draft); 
-                            database.SaveChanges(); 
+                        var draft = database.Drafts.FirstOrDefault(
+                            d => d.Id == data.DraftId &&
+                                d.UserId == user.Id
+                        );
+
+                        Console.WriteLine(
+                            draft == null
+                                ? "DRAFT NOT FOUND"
+                                : $"DRAFT FOUND: {draft.Id}"
+                        );
+
+                        if (draft != null)
+                        {
+                            database.Drafts.Remove(draft);
+                            database.SaveChanges();
+
+                            Console.WriteLine("DRAFT DELETED");
                         }
                     }
+
                     request.Respond(true);
                 }
                 

@@ -43,6 +43,7 @@ body {
     gap: 30px;
     box-sizing: border-box;
     border-right: 1px solid #eef0f2;
+    height: 100%;
 }
 
 .sidebar-group { display: flex; flex-direction: column; gap: 8px; position: relative; }
@@ -72,7 +73,16 @@ body {
     cursor: pointer;
     transition: background 0.2s;
 }
+.draft-actions {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
+.publish-btn {
+    width: 100%;
+}
 .publish-btn:hover { background-color: #009443; }
 
 .editor-main {
@@ -528,17 +538,6 @@ body {
 #pinnedArticlesList {
     padding: 0 10px;
 }
-/* --- RIGHT PANEL LAYOUT --- */
-.side-panel-right {
-    width: 280px;
-    padding: 20px;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    border-left: 1px solid #e0e0e0;
-    height: 100vh;
-}
-
 /* --- BUTTON STYLING --- */
 /* This covers both "Create Article" and "Drafts" buttons */
 .createArticleButton {
@@ -606,4 +605,105 @@ body {
     padding: 20px;
     overflow-y: auto;
 }
-    
+.drafts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    padding: 20px;
+}
+
+.draft-item {
+    background: white;
+    border-radius: 12px;
+    border: 1px solid #e2e8f0;
+    padding: 18px;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.05);
+    transition: all .2s ease;
+}
+
+.draft-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+}
+
+.draft-item h3 {
+    margin: 0;
+    font-size: 18px;
+    color: #111827;
+}
+
+.draft-preview {
+    color: #6b7280;
+    font-size: 14px;
+    line-height: 1.5;
+}
+
+.draft-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+.draft-buttons button {
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.draft-buttons button:first-child {
+    background: #00b050;
+    color: white;
+}
+
+.delete-draft-btn {
+    background: #ef4444 !important;
+    color: white !important;
+}
+
+.delete-draft-btn:hover {
+    background: #dc2626 !important;
+}
+
+.drafts-popup-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 20px;
+}
+.drafts-close-btn {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #dbe1e8;
+    border-radius: 8px;
+    background: #ffffff;
+    color: #475569;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.drafts-close-btn:hover {
+    background: #f8fafc;
+    border-color: #cbd5e1;
+}
+
+.drafts-close-btn:active {
+    transform: translateY(1px);
+}
+
+/*RIGHT SIDEPANNEL STYLING NIGGGGAAA*/
+.side-panel-right .sidebar-section {
+    padding: 10px 0;
+    gap: 10px;
+}
+
+.side-panel-right .createArticleButton {
+    margin: 0 12px;
+    width: calc(100% - 24px);
+}
+
+.side-panel-right .createArticleButton:last-child {
+    margin-bottom: 12px;
+}

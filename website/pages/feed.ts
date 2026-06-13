@@ -81,6 +81,12 @@ var myDraftsBtn = create("button", { textContent: "My Drafts", className: "publi
 myDraftsBtn.style.marginTop = "10px";
 myDraftsBtn.style.backgroundColor = "#444";
 //#endregion
+const sidebarActions = create("div", { className: "draft-actions" },
+    saveDraftBtn,
+    myDraftsBtn,
+    publishButton
+);
+
 
 //#region RICH TEXT EDITOR PLACEHOLDER FIX
 var createEditorWithPlaceholder = () => {
@@ -124,9 +130,7 @@ var formatText = (command: string, value: string | null = null): void => {
 var articleContentCreationPopUp = create("div", { className: "editor-layout-container" },
     create("div", { className: "editor-sidebar" },
         tagsGroup,
-        saveDraftBtn,
-        myDraftsBtn,
-        publishButton
+        sidebarActions
     ),
     create("div", { className: "editor-main" },
         create("div", { className: "editor-nav" },
@@ -194,8 +198,8 @@ document.body.appendChild(articlePopUpDiv);
 const draftsListContainer = create("div", { className: "drafts-list" });
 const draftsPopupContent = create("div", { className: "editor-layout-container" },
     create("div", { className: "editor-sidebar" },
-        create("h2", { textContent: "My Drafts" }),
-        create("button", { textContent: "Close", className: "suli-cancel", onclick: () => draftsPopup.classList.add("invisible") })
+        create("h2", { textContent: "Article Drafts" }),
+        create("button", { textContent: "Close", className: "drafts-close-btn", onclick: () => draftsPopup.classList.add("invisible") })
     ),
     create("div", { className: "editor-main" }, draftsListContainer)
 );
@@ -232,7 +236,8 @@ var createArticleButton = get("button", "createArticleButton") as HTMLButtonElem
 createArticleButton.onclick = async function () {
     var token = localStorage.getItem("token");
     var user = await send<any>("getUser", token);
-    
+
+    draftsPopup.classList.add("invisible");
     if (user == null) {
         suliPopup.classList.remove("invisible");
     } else {
@@ -244,11 +249,39 @@ createArticleButton.onclick = async function () {
         articlePopUpDiv.classList.remove("invisible");
     }
 };
+const openDraftsButton = get("button", "openDraftsButton") as HTMLButtonElement;
 
+openDraftsButton.onclick = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+        suliPopup.classList.remove("invisible");
+        return;
+    }
+
+    const user = await send<any>("getUser", token);
+
+    if (!user) {
+        suliPopup.classList.remove("invisible");
+        return;
+    }
+
+    myDraftsBtn.click();
+};
 myDraftsBtn.onclick = async () => {
     const token = localStorage.getItem("token");
-    if (!token) { suliPopup.classList.remove("invisible"); return; }
-    
+
+    if (!token) {
+        suliPopup.classList.remove("invisible");
+        return;
+    }
+
+    const user = await send<any>("getUser", token);
+
+    if (!user) {
+        suliPopup.classList.remove("invisible");
+        return;
+    }
     draftsListContainer.innerHTML = "";
     var drafts = await send<any[]>("getDrafts", token);
 
@@ -257,32 +290,83 @@ myDraftsBtn.onclick = async () => {
     }
 
     drafts.forEach(draft => {
-        const item = create("div", { className: "draft-item" });
-        item.style.cssText = "border: 1px solid #ccc; padding: 10px; margin-bottom: 10px;";
-        item.appendChild(create("h3", { textContent: draft.Title }));
 
-        const editBtn = create("button", { textContent: "Edit", onclick: () => {
-            currentDraftId = draft.Id;
-            (document.getElementById("titleInput") as HTMLTextAreaElement).value = draft.Title;
-            richTextEditor.innerHTML = draft.Content;
-            selectedTags = draft.Tags ? draft.Tags.split(",") : [];
+    const draftId = draft.Id ?? draft.id;
+    const draftTitle = draft.Title ?? draft.title ?? "";
+    const draftContent = draft.Content ?? draft.content ?? "";
+    const draftTags = draft.Tags ?? draft.tags ?? "";
+
+    const item = create("div", { className: "draft-item" });
+
+    item.appendChild(
+        create("h3", {
+            textContent: draftTitle || "Untitled Draft"
+        })
+    );
+
+    item.appendChild(
+        create("div", {
+            textContent:
+                draftContent.replace(/<[^>]+>/g, "").substring(0, 120) +
+                (draftContent.length > 120 ? "..." : ""),
+            className: "draft-preview"
+        })
+    );
+
+    const buttons = create("div", {
+        className: "draft-buttons"
+    });
+
+    const editBtn = create("button", {
+        textContent: "Edit",
+        onclick: () => {
+
+            currentDraftId = draftId;
+
+            (document.getElementById("titleInput") as HTMLTextAreaElement).value =
+                draftTitle;
+
+            richTextEditor.innerHTML =
+                draftContent || "<p><br></p>";
+
+            selectedTags =
+                draftTags.length > 0
+                    ? draftTags.split(",")
+                    : [];
+
             updateTagsDisplay();
+
             draftsPopup.classList.add("invisible");
             articlePopUpDiv.classList.remove("invisible");
-        }});
-        item.appendChild(editBtn);
-
-        const deleteBtn = create("button", { textContent: "Delete", onclick: async () => {
-            // Sends the data as an object matching the C# class
-            await send("deleteDraft", { draftId: draft.Id, token: token });
-            alert("Deleted");
-            // Refresh list
-            myDraftsBtn.click(); 
-        }});
-        item.appendChild(deleteBtn);
-        
-        draftsListContainer.appendChild(item);
+        }
     });
+
+    const deleteBtn = create("button", {
+        textContent: "Delete",
+        className: "delete-draft-btn",
+        onclick: async () => {
+
+            const success = await send<boolean>(
+                "deleteDraft",
+            {
+                DraftId: draftId,
+                Token: token
+            }
+            );
+
+            if (success) {
+                item.remove();
+            }
+        }
+    });
+
+    buttons.appendChild(editBtn);
+    buttons.appendChild(deleteBtn);
+
+    item.appendChild(buttons);
+
+    draftsListContainer.appendChild(item);
+});
 
     draftsPopup.classList.remove("invisible");
 };
@@ -328,9 +412,11 @@ var loadFeedStream = async function(): Promise<void> {
         const success = await send<boolean>("toggleVote", [token, articleId, requestedVote]);
         
         if (success) {
-            await loadFeedStream(); 
+            const scrollPos = window.scrollY;
+            await loadFeedStream();
+            window.scrollTo(0, scrollPos);
         } else {
-            console.error("Voting failed: Server returned false");
+            console.error("Voting failed, Please Try Again Later");
         }
     };
 
@@ -427,7 +513,11 @@ var loadFeedStream = async function(): Promise<void> {
             if (!articleId) return;
 
             var success = await send<boolean>("togglePin", [token, articleId]);
-            if (success) loadFeedStream();
+            if (success) {
+                const scrollPos = window.scrollY;
+                await loadFeedStream();
+                window.scrollTo(0, scrollPos);
+            }
         }; 
 
         header.appendChild(titleGroup);
@@ -483,17 +573,27 @@ publishButton.onclick = async function() {
     
     var success = await send<boolean>("publishArticle", [titleVal, contentVal, tagsString, token]);
     if (success) {
-        // If it was a draft, delete the draft after publish
-        if (currentDraftId) await send("deleteDraft", [currentDraftId, token]);
+
+        if (currentDraftId) {
+            await send("deleteDraft", {
+            DraftId: currentDraftId,
+            Token: token
+        });
+        }
+
+        currentDraftId = null;
 
         titleInput.value = "";
         richTextEditor.innerHTML = "<p id='editor-placeholder'>Add your thoughts and ideas here...</p>";
+
         selectedTags = [];
         updateTagsDisplay();
-        
+
         articlePopUpDiv.classList.add("invisible");
-        loadFeedStream();
-    } else {
+
+        await loadFeedStream();
+    }
+    else {
         alert("Failed to publish your article. Verify your session.");
     }
 };
